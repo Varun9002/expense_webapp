@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import App from './App';
 import './index.css';
 import Accounts from './pages/Accounts';
-import Records from './pages/Records';
+// import Records from './pages/Records';
 const root = document.getElementById('root')!;
 const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
 if (darkThemeMq.matches) {
@@ -16,10 +16,10 @@ createRoot(root).render(
 		<BrowserRouter>
 			<Routes>
 				<Route element={<App />}>
-					<Route index element={<Records />} />
+					<Route index element={<Accounts />} />
 					<Route path="accounts" element={<Accounts />} />
-					{/* <Route path="register" element={<Accounts />} />
-					<Route path="register" element={<Accounts />} /> */}
+					<Route path="analysis" element={<Accounts />} />
+					<Route path="categories" element={<Accounts />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
