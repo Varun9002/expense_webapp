@@ -35,7 +35,7 @@ export default function App() {
 	return (
 		<>
 			<Main>
-				<h1 className="bg-background text-4xl text-violet-500 font-bold p-3 md:pl-10 text-shadow-lg text-shadow-violet-800 font-raleway text-center md:text-left md:self-start">
+				<h1 className="bg-background text-4xl text-violet-500 font-bold p-3 md:pl-10 text-shadow-lg text-shadow-violet-800 font-raleway text-center md:text-left md:self-start sticky top-0 left-0 w-full z-10">
 					My Expense Web
 				</h1>
 				<Outlet />

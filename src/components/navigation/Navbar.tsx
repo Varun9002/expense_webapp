@@ -10,7 +10,7 @@ export interface NavProps {
 }
 export default function Nav({ items }: NavProps) {
 	return (
-		<div className="w-full bg-auto flex justify-around">
+		<div className="w-full flex justify-around fixed bottom-0 left-0 bg-background">
 			{items.map(({ name, icon, link }, index) => (
 				<NavItem
 					name={name}
