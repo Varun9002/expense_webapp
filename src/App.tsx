@@ -1,9 +1,16 @@
 import Main from '@/components/Main';
-import { ChartPie, NotebookPen, Tag, Wallet } from 'lucide-react';
-import { useState } from 'react';
+import {
+	ChartPie,
+	FileDown,
+	FileUp,
+	NotebookPen,
+	Tag,
+	Wallet,
+} from 'lucide-react';
 import { Outlet } from 'react-router';
 import './App.css';
 import Nav, { NavProps } from './components/navigation/Navbar';
+import { Button } from './components/ui/button';
 const navitems: NavProps = {
 	items: [
 		{
@@ -30,14 +37,32 @@ const navitems: NavProps = {
 };
 
 export default function App() {
-	const [count, setCount] = useState(0);
+	// const [count, setCount] = useState(0);
 
 	return (
 		<>
 			<Main>
-				<h1 className="bg-background text-4xl text-violet-500 font-bold p-3 md:pl-10 text-shadow-lg text-shadow-violet-800 font-raleway text-center md:text-left md:self-start sticky top-0 left-0 w-full z-10">
-					My Expense Web
-				</h1>
+				<div className="bg-primary-foreground text-4xl max-sm:text-lg max-sm: md:pl-10 text-center md:text-left md:self-start w-full z-10 flex  justify-between items-center">
+					<h1 className="text-shadow-lg text-shadow-violet-800 text-violet-500 font-bold font-raleway p-5 ">
+						My Expense
+					</h1>
+					<div className=" flex gap-2 justify-center items-center px-2 sm:p-5">
+						<Button
+							variant={'secondary'}
+							className="cursor-pointer hover:bg-foreground hover:text-background"
+						>
+							<FileDown />
+							Import
+						</Button>
+						<Button
+							variant={'secondary'}
+							className="cursor-pointer hover:bg-foreground hover:text-background"
+						>
+							<FileUp />
+							Export
+						</Button>
+					</div>
+				</div>
 				<Outlet />
 				<Nav items={navitems.items} />
 			</Main>

@@ -11,7 +11,7 @@ export interface NavProps {
 export default function Nav({ items }: NavProps) {
 	return (
 		<div className="w-full flex justify-around fixed bottom-0 left-0 bg-background">
-			{items.map(({ name, icon, link }, index) => (
+			{items.map(({ name, icon, link }) => (
 				<NavItem
 					name={name}
 					icon={icon}

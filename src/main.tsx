@@ -4,11 +4,11 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import App from './App';
 import './index.css';
 import Accounts from './pages/Accounts';
-// import Records from './pages/Records';
+import Records from './pages/Records';
 const root = document.getElementById('root')!;
 const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
 if (darkThemeMq.matches) {
-	root.className = root.className + 'dark';
+	document.documentElement.classList.add('dark');
 }
 
 createRoot(root).render(
@@ -16,7 +16,7 @@ createRoot(root).render(
 		<BrowserRouter>
 			<Routes>
 				<Route element={<App />}>
-					<Route index element={<Accounts />} />
+					<Route index element={<Records />} />
 					<Route path="accounts" element={<Accounts />} />
 					<Route path="analysis" element={<Accounts />} />
 					<Route path="categories" element={<Accounts />} />

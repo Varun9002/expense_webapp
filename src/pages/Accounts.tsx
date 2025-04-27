@@ -1,72 +1,150 @@
+import { AccountEdit } from '@/components/AccountEdit';
+import { AccountItem } from '@/components/AccountItem';
+import { Button } from '@/components/ui/button';
+import Currency from '@/components/ui/currency';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import {
+	clearAccount,
+	deleteAccount,
+	getAccount,
+	newAccount,
+	updateAccount,
+} from '@/lib/db_helpers';
+import { Account } from '@/lib/db_schema';
+import { UUID } from 'crypto';
+import { SquarePlus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+const initAccounts: Account[] = [
+	{
+		id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
+		name: 'Account 1',
+		intialAmount: 100,
+		trackedAmount: 11,
+	},
+	{
+		id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
+		name: 'Account 2',
+		intialAmount: 0,
+		trackedAmount: 11,
+	},
+];
 
 export default function Accounts() {
 	const expenseTotal = 82054.0;
 	const incomeTotal = 118075.0;
 	const allAccountTotal = incomeTotal - expenseTotal;
+	const [accounts, setAccounts] = useState<Account[]>([]);
+	const [editItem, setEditItem] = useState<Account | null>(null);
+	const [isEditOpen, setIsEditOpen] = useState(false);
 
+	useEffect(() => {
+		clearAccount().then(() => {});
+		getAccount().then((acc) => {
+			setAccounts(acc);
+		});
+	}, []);
+
+	async function onEditSave(updAccount: Account) {
+		await updateAccount(updAccount);
+		const filtetAcc = await getAccount();
+
+		setAccounts(filtetAcc);
+		handleIsEditOpen(false);
+	}
+	function handleEdit(id: UUID | null) {
+		const filterAcc = accounts.filter((acc) => {
+			return acc.id === id;
+		});
+		if (filterAcc.length > 0) {
+			setEditItem(filterAcc[0]);
+			setIsEditOpen(true);
+		} else {
+			setEditItem(null);
+			setIsEditOpen(false);
+		}
+	}
+	async function handleDelete(id: UUID) {
+		await deleteAccount(id);
+		const filtetAcc = await getAccount();
+
+		setAccounts(filtetAcc);
+	}
+	function handleIsEditOpen(b: boolean) {
+		if (b) {
+			setEditItem(editItem);
+			setIsEditOpen(true);
+		} else {
+			setEditItem(null);
+			setIsEditOpen(false);
+		}
+	}
+	async function handleNewClick() {
+		await newAccount();
+		const filtetAcc = await getAccount();
+		setAccounts(filtetAcc);
+	}
 	return (
 		<>
-			<div className="sticky top-0 w-full flex justify-center z-11">
+			<div className="w-full flex justify-center z-11 mt-5">
 				<div className="flex flex-col w-full max-w-3xl">
 					<h3 className="text-center">
-						[ All Accounts{' '}
-						<span
-							className={
-								allAccountTotal > 0
-									? 'text-emerald-400'
-									: 'text-red-500'
-							}
-						>
-							{allAccountTotal.toLocaleString('en-US', {
-								style: 'currency',
-								currency: 'INR',
-							})}
-						</span>
-						]
+						[ All Accounts <Currency value={allAccountTotal} />]
 					</h3>
 					<div className="flex justify-around pt-5">
 						<div className="flex flex-col justify-center items-center">
 							<h1 className="text-sm">EXPENSE SO FAR</h1>
-							<p className="text-sm text-red-500">
+							{/* <p className="text-sm text-red-500">
 								&#8377;{' '}
 								{expenseTotal.toLocaleString('en-US', {
 									style: 'currency',
 									currency: 'INR',
 								})}
-							</p>
+							</p> */}
+							<Currency value={-expenseTotal}></Currency>
 						</div>
 						<Separator orientation="vertical" />
 						<div className="flex flex-col justify-center items-center">
 							<h1 className="text-sm">INCOME SO FAR</h1>
-							<p className="text-sm text-emerald-300">
-								&#8377;{' '}
-								{incomeTotal.toLocaleString('en-US', {
-									style: 'currency',
-									currency: 'INR',
-								})}
-							</p>
+							<Currency value={incomeTotal}></Currency>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div className="overflow-y-hidden">
-				<ScrollArea className="">
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
-					<div className="text-9xl">Helkkl</div>
+			<div className="overflow-y-hidden w-full ">
+				<ScrollArea className="h-full pb-14 w-full">
+					<div className="flex flex-col justify-center items-center mt-12 ">
+						<div className="max-w-xl w-full sm:min-w-lg flex flex-col gap-4">
+							{accounts.map((acc) => {
+								return (
+									<AccountItem
+										name={acc.name}
+										amount={
+											acc.intialAmount + acc.trackedAmount
+										}
+										id={acc.id}
+										key={acc.id}
+										editHandler={handleEdit}
+										deleteHandler={handleDelete}
+									/>
+								);
+							})}
+						</div>
+						<Button className="my-10" onClick={handleNewClick}>
+							<SquarePlus /> New Account
+						</Button>
+					</div>
 				</ScrollArea>
 			</div>
+			{editItem !== null && (
+				<AccountEdit
+					isOpen={isEditOpen}
+					setIsOpen={handleIsEditOpen}
+					editItem={editItem}
+					onSave={onEditSave}
+				/>
+			)}
 		</>
 	);
 }
