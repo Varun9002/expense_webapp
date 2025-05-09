@@ -37,6 +37,11 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Set BASE_URL env var from repo name
+              run: |
+                  REPO_NAME=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f2)
+                  echo "VITE_APP_BASE_URL=/$REPO_NAME/" >> $GITHUB_ENV
+
             - name: Build
               run: npm run build --if-present
 

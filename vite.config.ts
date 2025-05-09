@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 export default defineConfig({
-	base: '/',
+	base: process.env.VITE_APP_BASE_URL,
 	plugins: [
 		react(),
 		tailwindcss(),
@@ -16,8 +16,8 @@ export default defineConfig({
 			manifest: {
 				name: 'My Expense Web',
 				short_name: 'Expense Web',
-				start_url: '/',
-				scope: '/',
+				start_url: process.env.VITE_APP_BASE_URL,
+				scope: process.env.VITE_APP_BASE_URL,
 				description: 'This is a PWA built with Vite and React',
 				display: 'standalone',
 				theme_color: '#000000',

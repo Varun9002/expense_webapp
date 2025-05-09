@@ -13,7 +13,7 @@ if (darkThemeMq.matches) {
 
 createRoot(root).render(
 	<StrictMode>
-		<BrowserRouter basename="/">
+		<BrowserRouter basename={import.meta.env.VITE_APP_BASE_URL}>
 			<Routes>
 				<Route element={<App />}>
 					<Route index element={<Records />} />
