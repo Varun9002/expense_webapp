@@ -13,10 +13,10 @@ type ItemBoxProps = {
 export function ExpenseItem({
 	expense,
 	showDate,
-	editHandler,
-	id,
-	deleteHandler,
-}: ItemBoxProps) {
+}: // editHandler,
+// id,
+// deleteHandler,
+ItemBoxProps) {
 	return (
 		<div className="w-full">
 			{showDate && (
