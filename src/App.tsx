@@ -42,7 +42,7 @@ export default function App() {
 	return (
 		<>
 			<Main>
-				<div className="bg-primary-foreground text-4xl max-sm:text-lg max-sm: md:pl-10 text-center md:text-left md:self-start w-full z-10 flex  justify-between items-center">
+				<div className="bg-sidebar text-4xl max-sm:text-lg max-sm: md:pl-10 text-center md:text-left md:self-start w-full z-10 flex  justify-between items-center">
 					<h1 className="text-shadow-lg text-shadow-violet-800 text-violet-500 font-bold font-raleway p-5 ">
 						My Expense
 					</h1>

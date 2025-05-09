@@ -1,5 +1,7 @@
 import { ExpenseItem } from '@/components/ExpenseItem';
+import { Button } from '@/components/ui/button';
 import Currency from '@/components/ui/currency';
+import { MonthPicker } from '@/components/ui/monthpicker';
 import {
 	Pagination,
 	PaginationContent,
@@ -8,33 +10,46 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from '@/components/ui/pagination';
+import { format } from 'date-fns/format';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Expense } from '@/lib/db_schema';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { clearExpense, getExpensesByMonth } from '@/lib/db_helpers';
+import { Account, Expense } from '@/lib/db_schema';
+import { cn } from '@/lib/utils';
 import { UUID } from 'crypto';
-import { useState } from 'react';
-const exp: Expense[] = [
-	{
-		id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
-		name: 'Exp1',
-		amount: 22.2,
-		category_id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
-		account_id: '5fd0857c-6181-494f-bd2c-b69126d175b2',
-		date: new Date(),
-	},
-	{
-		id: '5fd0857c-6181-494f-bd2c-b69126d175a2',
-		name: 'Exp1',
-		amount: 42.2,
-		category_id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
-		account_id: '5fd0857c-6181-494f-bd2c-b69126d175b2',
-		date: new Date(),
-	},
-];
+import { CalendarIcon, Plus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
 export default function Records() {
-	const incomeTotal = 0;
-	const expenseTotal = 0;
+	const [incomeTotal, setIncomeTotal] = useState(0);
+	const [expenseTotal, setExpenseTotal] = useState(0);
 	const [date, setDate] = useState(new Date());
+	const [addBtn, setAddBtn] = useState(true);
+	const [exp, setExp] = useState<(Expense & { account: Account })[]>([]);
+
+	useEffect(() => {
+		clearExpense().then(() => {});
+		getExpensesByMonth(date).then((ex) => {
+			setExp(ex);
+			const { spent, earn } = ex.reduce(
+				(acc, e) =>
+					e.amount > 0
+						? { ...acc, earn: acc.earn + e.amount }
+						: { ...acc, spent: acc.spent - e.amount },
+				{ spent: 0, earn: 0 }
+			);
+			setIncomeTotal(earn);
+			setExpenseTotal(spent);
+		});
+	}, [date]);
+
 	const handleNextMonth = () => {
 		const nextMonth = new Date(date);
 		nextMonth.setMonth(date.getMonth() + 1);
@@ -63,34 +78,50 @@ export default function Records() {
 		// const filtetAcc = await getAccount();
 		// setAccounts(filtetAcc);
 	}
+	function handleNewClick() {}
 	return (
 		<>
-			<div className="w-full flex justify-center z-11 mt-5">
+			<div className="w-full flex justify-center z-11 mt-5 pb-2 border-b-2 shadow-md shadow-accent">
 				<div className="flex flex-col w-full max-w-3xl">
-					<Pagination className="grow">
+					<Pagination className="">
 						<PaginationContent className="grow justify-around">
 							<PaginationItem onClick={handlePreviousMonth}>
 								<PaginationPrevious
 									href="#"
-									className="text-lg"
+									className="text-md"
 								/>
 							</PaginationItem>
 							<PaginationItem>
-								<PaginationLink
-									href="#"
-									className="w-30 text-lg"
-								>
-									{date.toLocaleDateString('en-US', {
-										month: 'long',
-									})}
-									,{' '}
-									{date.toLocaleDateString('en-US', {
-										year: 'numeric',
-									})}
+								<PaginationLink href="#" className="w-30">
+									<Popover>
+										<PopoverTrigger asChild>
+											<Button
+												variant={'ghost'}
+												className={cn(
+													'w-full justify-start text-left font-normal cursor-pointer text-md',
+													!date &&
+														'text-muted-foreground'
+												)}
+											>
+												<CalendarIcon className="mr-2 h-4 w-4" />
+												{date ? (
+													format(date, 'MMM yyyy')
+												) : (
+													<span>Pick a month</span>
+												)}
+											</Button>
+										</PopoverTrigger>
+										<PopoverContent className="w-auto p-0">
+											<MonthPicker
+												onMonthSelect={setDate}
+												selectedMonth={date}
+											/>
+										</PopoverContent>
+									</Popover>
 								</PaginationLink>
 							</PaginationItem>
 							<PaginationItem onClick={handleNextMonth}>
-								<PaginationNext href="#" className="text-lg" />
+								<PaginationNext href="#" className="text-md" />
 							</PaginationItem>
 						</PaginationContent>
 					</Pagination>
@@ -107,11 +138,16 @@ export default function Records() {
 					</div>
 				</div>
 			</div>
-			<div className="overflow-y-hidden w-full ">
-				<ScrollArea className="h-full pb-14 w-full">
-					<div className="flex flex-col justify-center items-center mt-12 ">
-						<div className="max-w-xl w-full sm:min-w-lg flex flex-col gap-4">
-							{exp.map((acc) => {
+			<div className="overflow-y-hidden h-full w-full ">
+				<ScrollArea
+					className="h-full pb-18 w-full"
+					onScrollEndCapture={(e) => {
+						setAddBtn((e.target as HTMLDivElement).scrollTop == 0);
+					}}
+				>
+					<div className="flex flex-col justify-center items-center mt-4 ">
+						<div className="max-w-xl w-full sm:min-w-lg flex flex-col ">
+							{exp.map((acc, i) => {
 								return (
 									<ExpenseItem
 										expense={acc}
@@ -119,16 +155,39 @@ export default function Records() {
 										key={acc.id}
 										editHandler={handleEdit}
 										deleteHandler={handleDelete}
+										showDate={
+											i > 0
+												? acc.date.toLocaleDateString() !=
+												  exp[
+														i - 1
+												  ].date.toLocaleDateString()
+												: true
+										}
 									/>
 								);
 							})}
 						</div>
-						{/* <Button className="my-10" onClick={handleNewClick}>
-							<SquarePlus /> New Account
-						</Button> */}
 					</div>
 				</ScrollArea>
 			</div>
+			<AnimatePresence>
+				{addBtn && (
+					<motion.div
+						className="fixed bottom-20 right-4 z-20"
+						initial={{ scale: 0 }}
+						animate={{ scale: 1 }}
+						exit={{ scale: 0 }}
+						transition={{ duration: 0.1 }}
+					>
+						<Button
+							variant="default"
+							className="size-16 rounded-full"
+						>
+							<Plus className="size-10" strokeWidth={4} />
+						</Button>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</>
 	);
 }

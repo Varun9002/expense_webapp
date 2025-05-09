@@ -26,7 +26,7 @@ export function AccountItem({
 	return (
 		<>
 			<CardContent className="w-full">
-				<div className=" flex items-center space-x-4 rounded-md border p-4 hover:bg-primary-foreground ">
+				<div className=" flex items-center space-x-4 rounded-md border p-4 hover:bg-popover">
 					<Landmark />
 					<div className="flex-1 space-y-1">
 						<p className="text-sm font-medium text-muted-foreground">

@@ -16,21 +16,6 @@ import { UUID } from 'crypto';
 import { SquarePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const initAccounts: Account[] = [
-	{
-		id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
-		name: 'Account 1',
-		intialAmount: 100,
-		trackedAmount: 11,
-	},
-	{
-		id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
-		name: 'Account 2',
-		intialAmount: 0,
-		trackedAmount: 11,
-	},
-];
-
 export default function Accounts() {
 	const expenseTotal = 82054.0;
 	const incomeTotal = 118075.0;
@@ -95,13 +80,6 @@ export default function Accounts() {
 					<div className="flex justify-around pt-5">
 						<div className="flex flex-col justify-center items-center">
 							<h1 className="text-sm">EXPENSE SO FAR</h1>
-							{/* <p className="text-sm text-red-500">
-								&#8377;{' '}
-								{expenseTotal.toLocaleString('en-US', {
-									style: 'currency',
-									currency: 'INR',
-								})}
-							</p> */}
 							<Currency value={-expenseTotal}></Currency>
 						</div>
 						<Separator orientation="vertical" />
@@ -131,8 +109,11 @@ export default function Accounts() {
 								);
 							})}
 						</div>
-						<Button className="my-10" onClick={handleNewClick}>
-							<SquarePlus /> New Account
+						<Button
+							className="my-10 cursor-pointer"
+							onClick={handleNewClick}
+						>
+							<SquarePlus /> Add New Account
 						</Button>
 					</div>
 				</ScrollArea>

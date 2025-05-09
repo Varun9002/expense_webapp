@@ -12,7 +12,7 @@ export default function NavItem({ name, icon, link }: NavItemProps) {
 		<NavLink
 			to={link}
 			className={({ isActive }) =>
-				'grow' + (isActive ? ' bg-secondary' : '')
+				'grow border-2' + (isActive ? ' bg-secondary text-chart-4' : '')
 			}
 		>
 			<Button

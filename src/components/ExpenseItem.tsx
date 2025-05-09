@@ -1,77 +1,51 @@
-import { Expense } from '@/lib/db_schema';
+import { Account, Expense } from '@/lib/db_schema';
 import { UUID } from 'crypto';
-import { Ellipsis, Landmark, Pencil, Trash2 } from 'lucide-react';
-import { Button } from './ui/button';
+import { Archive } from 'lucide-react';
 import { CardContent } from './ui/card';
 import Currency from './ui/currency';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from './ui/dropdown-menu';
 type ItemBoxProps = {
-	expense: Expense;
+	expense: Expense & { account: Account };
+	showDate?: boolean;
 	editHandler: (id: UUID | null) => void;
 	deleteHandler: (id: UUID) => void;
 	id: UUID;
 };
 export function ExpenseItem({
 	expense,
+	showDate,
 	editHandler,
 	id,
 	deleteHandler,
 }: ItemBoxProps) {
 	return (
-		<>
-			<CardContent className="w-full">
-				<div className=" flex items-center space-x-4 rounded-md border p-4 hover:bg-primary-foreground ">
-					<Landmark />
+		<div className="w-full">
+			{showDate && (
+				<div className="border-b-1 border-muted-foreground text-muted-foreground text-lg font-bold p-1">
+					{expense.date.toLocaleDateString('en-US', {
+						month: 'long',
+						day: 'numeric',
+					})}
+				</div>
+			)}
+			<CardContent className="w-full px-0">
+				<div className=" flex items-center space-x-4 p-2 px-4 hover:bg-popover ">
+					<Archive />
 					<div className="flex-1 space-y-1">
-						<p className="text-sm font-medium text-muted-foreground">
+						<p className="text-md font-medium text-foreground">
 							{expense.name}
 						</p>
-						<p className="text-sm font-medium">
-							Balance:{' '}
-							<Currency value={expense.amount}></Currency>
+						<p className=" flex gap-2 text-sm text-muted-foreground">
+							{expense.account.name}
 						</p>
 					</div>
-
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								className="hover:cursor-pointer"
-								variant={'ghost'}
-							>
-								<Ellipsis />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuItem
-								onClick={() => {
-									setTimeout(() => {
-										editHandler(id);
-									}, 0);
-								}}
-							>
-								<Pencil />
-								Edit
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								variant="destructive"
-								onClick={() => {
-									setTimeout(() => {
-										deleteHandler(id);
-									}, 0);
-								}}
-							>
-								<Trash2 />
-								Delete
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<p className="text-md">
+						<Currency
+							value={expense.amount}
+							visibleSign={true}
+						></Currency>
+					</p>
 				</div>
 			</CardContent>
-		</>
+		</div>
 	);
 }
