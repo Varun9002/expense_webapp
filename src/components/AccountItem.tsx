@@ -15,6 +15,7 @@ type ItemBoxProps = {
 	editHandler: (id: UUID | null) => void;
 	deleteHandler: (id: UUID) => void;
 	id: UUID;
+	onClick: React.MouseEventHandler<HTMLDivElement>;
 };
 export function AccountItem({
 	name,
@@ -22,10 +23,11 @@ export function AccountItem({
 	editHandler,
 	id,
 	deleteHandler,
+	onClick,
 }: ItemBoxProps) {
 	return (
 		<>
-			<CardContent className="w-full">
+			<CardContent className="w-full" onClick={onClick}>
 				<div className=" flex items-center space-x-4 rounded-md border p-4 hover:bg-popover">
 					<Landmark />
 					<div className="flex-1 space-y-1">
@@ -48,7 +50,8 @@ export function AccountItem({
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
 							<DropdownMenuItem
-								onClick={() => {
+								onClick={(event) => {
+									event.stopPropagation();
 									setTimeout(() => {
 										editHandler(id);
 									}, 0);
@@ -59,7 +62,8 @@ export function AccountItem({
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								variant="destructive"
-								onClick={() => {
+								onClick={(event) => {
+									event.stopPropagation();
 									setTimeout(() => {
 										deleteHandler(id);
 									}, 0);

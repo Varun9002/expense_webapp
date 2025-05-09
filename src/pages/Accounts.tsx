@@ -1,4 +1,5 @@
 import { AccountEdit } from '@/components/AccountEdit';
+import AccountExpense from '@/components/AccountExpense';
 import { AccountItem } from '@/components/AccountItem';
 import { Button } from '@/components/ui/button';
 import Currency from '@/components/ui/currency';
@@ -8,6 +9,7 @@ import {
 	clearAccount,
 	deleteAccount,
 	getAccount,
+	getExpenseStatus,
 	newAccount,
 	updateAccount,
 } from '@/lib/db_helpers';
@@ -17,18 +19,26 @@ import { SquarePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function Accounts() {
-	const expenseTotal = 82054.0;
-	const incomeTotal = 118075.0;
+	const [expenseTotal, setExpenseTotal] = useState(0);
+	const [incomeTotal, setIncomeTotal] = useState(0);
 	const allAccountTotal = incomeTotal - expenseTotal;
 	const [accounts, setAccounts] = useState<Account[]>([]);
+	const [isExpenseView, setIsExpenseView] = useState(false);
 	const [editItem, setEditItem] = useState<Account | null>(null);
 	const [isEditOpen, setIsEditOpen] = useState(false);
+	const [selectedAccId, setSelectedAccId] = useState<UUID | null>(null);
 
 	useEffect(() => {
-		clearAccount().then(() => {});
-		getAccount().then((acc) => {
-			setAccounts(acc);
-		});
+		clearAccount()
+			.then(() => getAccount())
+			.then((acc) => {
+				setAccounts(acc);
+				return getExpenseStatus();
+			})
+			.then(({ earn, spent }) => {
+				setExpenseTotal(spent);
+				setIncomeTotal(earn);
+			});
 	}, []);
 
 	async function onEditSave(updAccount: Account) {
@@ -80,7 +90,7 @@ export default function Accounts() {
 					<div className="flex justify-around pt-5">
 						<div className="flex flex-col justify-center items-center">
 							<h1 className="text-sm">EXPENSE SO FAR</h1>
-							<Currency value={-expenseTotal}></Currency>
+							<Currency value={expenseTotal}></Currency>
 						</div>
 						<Separator orientation="vertical" />
 						<div className="flex flex-col justify-center items-center">
@@ -105,6 +115,10 @@ export default function Accounts() {
 										key={acc.id}
 										editHandler={handleEdit}
 										deleteHandler={handleDelete}
+										onClick={() => {
+											setIsExpenseView(true);
+											setSelectedAccId(acc.id);
+										}}
 									/>
 								);
 							})}
@@ -125,6 +139,13 @@ export default function Accounts() {
 					editItem={editItem}
 					onSave={onEditSave}
 				/>
+			)}
+			{isExpenseView && selectedAccId && (
+				<AccountExpense
+					isOpen={isExpenseView}
+					accId={selectedAccId}
+					setIsOpen={setIsExpenseView}
+				></AccountExpense>
 			)}
 		</>
 	);

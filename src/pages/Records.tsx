@@ -35,19 +35,20 @@ export default function Records() {
 	const [exp, setExp] = useState<(Expense & { account: Account })[]>([]);
 
 	useEffect(() => {
-		clearExpense().then(() => {});
-		getExpensesByMonth(date).then((ex) => {
-			setExp(ex);
-			const { spent, earn } = ex.reduce(
-				(acc, e) =>
-					e.amount > 0
-						? { ...acc, earn: acc.earn + e.amount }
-						: { ...acc, spent: acc.spent - e.amount },
-				{ spent: 0, earn: 0 }
-			);
-			setIncomeTotal(earn);
-			setExpenseTotal(spent);
-		});
+		clearExpense()
+			.then(() => getExpensesByMonth(date))
+			.then((ex) => {
+				setExp(ex);
+				const { spent, earn } = ex.reduce(
+					(acc, e) =>
+						e.amount > 0
+							? { ...acc, earn: acc.earn + e.amount }
+							: { ...acc, spent: acc.spent - e.amount },
+					{ spent: 0, earn: 0 }
+				);
+				setIncomeTotal(earn);
+				setExpenseTotal(spent);
+			});
 	}, [date]);
 
 	const handleNextMonth = () => {
@@ -158,13 +159,13 @@ export default function Records() {
 										key={acc.id}
 										editHandler={handleEdit}
 										deleteHandler={handleDelete}
+										grouping="daily"
 										showDate={
-											i > 0
-												? acc.date.toLocaleDateString() !=
-												  exp[
-														i - 1
-												  ].date.toLocaleDateString()
-												: true
+											i == 0 ||
+											acc.date.toLocaleDateString() !=
+												exp[
+													i - 1
+												].date.toLocaleDateString()
 										}
 									/>
 								);

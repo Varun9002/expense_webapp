@@ -67,7 +67,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
-			name: 'Exp1',
+			name: 'Exp3',
 			amount: -22.2,
 			category_id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
 			account_id: '6d71b1bd-f1e3-4eb8-8766-1c1011d1e550',
@@ -75,7 +75,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a1',
-			name: 'Exp2',
+			name: 'Exp4',
 			amount: 42.2,
 			category_id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
 			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
@@ -83,7 +83,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b3',
-			name: 'Exp1',
+			name: 'Exp5',
 			amount: -22.2,
 			category_id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
 			account_id: '6d71b1bd-f1e3-4eb8-8766-1c1011d1e550',
@@ -91,7 +91,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a3',
-			name: 'Exp2',
+			name: 'Exp6',
 			amount: 42.2,
 			category_id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
 			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
@@ -131,4 +131,23 @@ export const getExpensesByMonth = async (date: Date) => {
 		};
 		return { ...exp, account: acc };
 	});
+};
+
+export const getExpensesByAccount = async (accId: UUID) => {
+	const expenses = await db.expense
+		.where('account_id')
+		.equals(accId)
+		.sortBy('date');
+	return expenses.reverse();
+};
+
+export const getExpenseStatus = async () => {
+	const expenses = await getExpenses();
+	return expenses.reduce(
+		(acc, ex) =>
+			ex.amount > 0
+				? { ...acc, earn: acc.earn + ex.amount }
+				: { ...acc, spent: acc.spent + ex.amount },
+		{ earn: 0, spent: 0 }
+	);
 };
