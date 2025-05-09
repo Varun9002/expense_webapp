@@ -62,6 +62,7 @@ export default function Records() {
 		setDate(prevMonth);
 	};
 	function handleEdit(id: UUID | null) {
+		console.log(id);
 		// const filterAcc = exp.filter((acc) => {
 		// 	return acc.id === id;
 		// });
@@ -74,11 +75,13 @@ export default function Records() {
 		// }
 	}
 	async function handleDelete(id: UUID) {
+		console.log(id);
+
 		// await deleteAccount(id);
 		// const filtetAcc = await getAccount();
 		// setAccounts(filtetAcc);
 	}
-	function handleNewClick() {}
+	// function handleNewClick() {}
 	return (
 		<>
 			<div className="w-full flex justify-center z-11 mt-5 pb-2 border-b-2 shadow-md shadow-accent">
