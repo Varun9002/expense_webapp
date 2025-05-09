@@ -1,6 +1,7 @@
 {
 	"name": "expense_webapp",
 	"private": true,
+	"homepage": "https://varun9002.github.io/expense_webapp",
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
