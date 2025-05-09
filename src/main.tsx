@@ -13,7 +13,7 @@ if (darkThemeMq.matches) {
 
 createRoot(root).render(
 	<StrictMode>
-		<BrowserRouter>
+		<BrowserRouter basename="/expense_webapp">
 			<Routes>
 				<Route element={<App />}>
 					<Route index element={<Records />} />
