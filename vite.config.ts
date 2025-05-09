@@ -16,7 +16,8 @@ export default defineConfig({
 			manifest: {
 				name: 'My Expense Web',
 				short_name: 'Expense Web',
-				start_url: '/',
+				start_url: 'expense_webapp',
+				scope: 'expense_webapp',
 				description: 'This is a PWA built with Vite and React',
 				display: 'standalone',
 				theme_color: '#000000',
