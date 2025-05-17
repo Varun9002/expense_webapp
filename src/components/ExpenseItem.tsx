@@ -20,9 +20,9 @@ export function ExpenseItem({
 // deleteHandler,
 ItemBoxProps) {
 	return (
-		<div className="w-full">
+		<div className="w-full last-of-type:mb-20">
 			{showDate && (
-				<div className="border-b-1 border-muted-foreground text-muted-foreground text-lg font-bold p-1">
+				<div className="border-b-1 border-muted-foreground text-muted-foreground text-lg font-bold p-1 ">
 					{expense.date.toLocaleDateString(
 						'en-US',
 						grouping == 'daily'

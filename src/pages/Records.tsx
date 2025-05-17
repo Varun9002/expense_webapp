@@ -13,6 +13,7 @@ import {
 import { format } from 'date-fns/format';
 import { AnimatePresence, motion } from 'framer-motion';
 
+import ExpenseEdit from '@/components/ExpenseEdit';
 import {
 	Popover,
 	PopoverContent,
@@ -32,6 +33,10 @@ export default function Records() {
 	const [expenseTotal, setExpenseTotal] = useState(0);
 	const [date, setDate] = useState(new Date());
 	const [addBtn, setAddBtn] = useState(true);
+	const [isExpEditOpen, setIsExpEditOpen] = useState(false);
+	const [expEditId, setExpEditId] = useState<UUID | undefined>(
+		'5fd0857c-6181-494f-bd2c-b69126d175a3'
+	);
 	const [exp, setExp] = useState<(Expense & { account: Account })[]>([]);
 
 	useEffect(() => {
@@ -186,12 +191,20 @@ export default function Records() {
 						<Button
 							variant="default"
 							className="size-16 rounded-full"
+							onClick={() => {
+								setIsExpEditOpen(true);
+							}}
 						>
 							<Plus className="size-10" strokeWidth={4} />
 						</Button>
 					</motion.div>
 				)}
 			</AnimatePresence>
+			<ExpenseEdit
+				isOpen={isExpEditOpen}
+				setIsOpen={setIsExpEditOpen}
+				expId={expEditId}
+			></ExpenseEdit>
 		</>
 	);
 }

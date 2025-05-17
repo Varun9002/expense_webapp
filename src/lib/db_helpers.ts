@@ -5,15 +5,16 @@ export const addAccount = async (account: Account) => {
 	await db.account.add(account);
 };
 
-export const newAccount = async () => {
+export const newAccount = () => {
 	const id = crypto.randomUUID();
-	await db.account.add({
+	const newItem = {
 		id: id,
 		name: '',
 		intialAmount: 0,
 		trackedAmount: 0,
-	});
-	return id;
+	};
+	// await db.account.add(newItem);
+	return newItem;
 };
 
 export const getAccount = async () => {
@@ -150,4 +151,8 @@ export const getExpenseStatus = async () => {
 				: { ...acc, spent: acc.spent + ex.amount },
 		{ earn: 0, spent: 0 }
 	);
+};
+
+export const getExpenseById = async (id: UUID) => {
+	return await db.expense.get(id);
 };

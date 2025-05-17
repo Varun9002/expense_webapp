@@ -12,7 +12,7 @@ import {
 type ItemBoxProps = {
 	name: string;
 	amount: number;
-	editHandler: (id: UUID | null) => void;
+	editHandler: (id: UUID) => void;
 	deleteHandler: (id: UUID) => void;
 	id: UUID;
 	onClick: React.MouseEventHandler<HTMLDivElement>;

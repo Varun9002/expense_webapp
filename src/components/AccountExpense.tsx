@@ -28,11 +28,11 @@ export default function AccountExpense({
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
 			<SheetContent
-				className="h-svh w-full [&>button:last-of-type>svg]:size-8 [&>button:last-of-type>svg]:cursor-pointer"
+				className="h-dvh w-full [&>button:last-of-type>svg]:size-8 [&>button:last-of-type>svg]:cursor-pointer"
 				side="bottom"
 			>
-				<SheetHeader>
-					<SheetTitle className="text-2xl">Acount Details</SheetTitle>
+				<SheetHeader className="text-2xl bg-accent">
+					<SheetTitle>Acount Details</SheetTitle>
 				</SheetHeader>
 
 				<div className="overflow-y-hidden">

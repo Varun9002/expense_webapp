@@ -15,8 +15,9 @@ import {
 } from '@/lib/db_helpers';
 import { Account } from '@/lib/db_schema';
 import { UUID } from 'crypto';
-import { SquarePlus } from 'lucide-react';
+import { CircleAlertIcon, SquarePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function Accounts() {
 	const [expenseTotal, setExpenseTotal] = useState(0);
@@ -48,7 +49,7 @@ export default function Accounts() {
 		setAccounts(filtetAcc);
 		handleIsEditOpen(false);
 	}
-	function handleEdit(id: UUID | null) {
+	function handleEdit(id: UUID) {
 		const filterAcc = accounts.filter((acc) => {
 			return acc.id === id;
 		});
@@ -56,8 +57,16 @@ export default function Accounts() {
 			setEditItem(filterAcc[0]);
 			setIsEditOpen(true);
 		} else {
-			setEditItem(null);
-			setIsEditOpen(false);
+			toast('Unexpected error encountered', {
+				description: 'Cannot find selected Account',
+				action: {
+					label: 'Close',
+					onClick: () => {},
+				},
+				icon: <CircleAlertIcon />,
+				duration: 10000,
+				className: 'text-destructive!',
+			});
 		}
 	}
 	async function handleDelete(id: UUID) {
@@ -76,13 +85,13 @@ export default function Accounts() {
 		}
 	}
 	async function handleNewClick() {
-		await newAccount();
-		const filtetAcc = await getAccount();
-		setAccounts(filtetAcc);
+		const acc = newAccount();
+		setEditItem(acc);
+		setIsEditOpen(true);
 	}
 	return (
 		<>
-			<div className="w-full flex justify-center z-11 mt-5">
+			<div className="w-full flex justify-center z-11 mt-5 ">
 				<div className="flex flex-col w-full max-w-3xl">
 					<h3 className="text-center">
 						[ All Accounts <Currency value={allAccountTotal} />]

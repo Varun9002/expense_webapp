@@ -11,6 +11,7 @@ import { Outlet } from 'react-router';
 import './App.css';
 import Nav, { NavProps } from './components/navigation/Navbar';
 import { Button } from './components/ui/button';
+import { Toaster } from './components/ui/sonner';
 const navitems: NavProps = {
 	items: [
 		{
@@ -66,6 +67,7 @@ export default function App() {
 				<Outlet />
 				<Nav items={navitems.items} />
 			</Main>
+			<Toaster />
 		</>
 	);
 }
