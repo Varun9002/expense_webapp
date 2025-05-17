@@ -80,7 +80,7 @@ export default function ExpenseEdit({
 							onValueChange={handleToggle}
 						>
 							<ToggleGroupItem
-								className="data-[state=on]:bg-primary data-[state=on]:text-white"
+								className="data-[state=on]:bg-primary data-[state=on]:text-white cursor-pointer"
 								value="income"
 								aria-label="Toggle income"
 							>
@@ -96,7 +96,7 @@ export default function ExpenseEdit({
 							</ToggleGroupItem>
 							<Separator orientation={'vertical'} />
 							<ToggleGroupItem
-								className="data-[state=on]:bg-primary data-[state=on]:text-white"
+								className="data-[state=on]:bg-primary data-[state=on]:text-white cursor-pointer"
 								value="expense"
 								aria-label="Toggle expense"
 							>
@@ -112,7 +112,7 @@ export default function ExpenseEdit({
 							</ToggleGroupItem>
 							<Separator orientation={'vertical'} />
 							<ToggleGroupItem
-								className="data-[state=on]:bg-primary data-[state=on]:text-white"
+								className="data-[state=on]:bg-primary data-[state=on]:text-white cursor-pointer"
 								value="transfer"
 								aria-label="Toggle transfer"
 							>

@@ -2,9 +2,10 @@ import { getExpensesByAccount } from '@/lib/db_helpers';
 import { Expense } from '@/lib/db_schema';
 import { UUID } from 'crypto';
 import { useEffect, useState } from 'react';
-import { ExpenseItem } from './ExpenseItem';
+import { AccountExpenseItem, ExpenseItem } from './ExpenseItem';
 import { ScrollArea } from './ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
+
 type AccountExpenseProp = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
@@ -43,6 +44,7 @@ export default function AccountExpense({
 									return (
 										<ExpenseItem
 											expense={acc}
+											iconName="archive"
 											id={acc.id}
 											key={acc.id}
 											editHandler={handleEdit}
@@ -67,7 +69,13 @@ export default function AccountExpense({
 														}
 													)
 											}
-										/>
+										>
+											<AccountExpenseItem
+												name={acc.name}
+												date={acc.date}
+												amount={acc.amount}
+											/>
+										</ExpenseItem>
 									);
 								})}
 							</div>

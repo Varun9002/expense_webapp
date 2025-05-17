@@ -1,6 +1,5 @@
 import { UUID } from 'crypto';
 import Dexie, { type EntityTable } from 'dexie';
-
 interface Account {
 	id: UUID;
 	name: string;

@@ -1,20 +1,25 @@
 import { Account, Expense } from '@/lib/db_schema';
 import { UUID } from 'crypto';
-import { Archive } from 'lucide-react';
+import { DynamicIcon, IconName } from 'lucide-react/dynamic';
+import { ReactElement } from 'react';
 import { CardContent } from './ui/card';
 import Currency from './ui/currency';
 type ItemBoxProps = {
 	expense: Expense & { account?: Account };
+	iconName: IconName;
 	showDate?: boolean;
 	editHandler: (id: UUID | null) => void;
 	deleteHandler: (id: UUID) => void;
 	id: UUID;
 	grouping: 'daily' | 'monthly';
+	children: ReactElement;
 };
 export function ExpenseItem({
 	expense,
 	showDate,
 	grouping,
+	iconName,
+	children,
 }: // editHandler,
 // id,
 // deleteHandler,
@@ -39,33 +44,89 @@ ItemBoxProps) {
 			)}
 			<CardContent className="w-full px-0">
 				<div className=" flex items-center space-x-4 p-2 px-4 hover:bg-popover ">
-					<Archive />
-					<div className="flex-1 space-y-1">
-						<p className="text-md font-medium text-foreground">
-							{expense.name}
-						</p>
-						{grouping == 'daily' && (
-							<p className=" flex gap-2 text-sm text-muted-foreground">
-								{expense.account?.name}
-							</p>
-						)}
-					</div>
-					<p className="text-md">
-						<Currency
-							value={expense.amount}
-							visibleSign={true}
-						></Currency>
-					</p>
-					{grouping == 'monthly' && (
-						<p className="text-sm font-bold text-input">
-							{expense.date.toLocaleDateString('en-US', {
-								month: 'long',
-								day: 'numeric',
-							})}
-						</p>
-					)}
+					<DynamicIcon name={iconName} />
+					{children}
 				</div>
 			</CardContent>
 		</div>
+	);
+}
+
+export function RecordExpenseItem({
+	name,
+	accName,
+	amount,
+}: {
+	name: string;
+	accName: string;
+	amount: number;
+}) {
+	return (
+		<>
+			<div className="flex-1 space-y-1">
+				<p className="text-md font-medium text-foreground">{name}</p>
+				<p className=" flex gap-2 text-sm text-muted-foreground">
+					{accName}
+				</p>
+			</div>
+			<p className="text-md">
+				<Currency value={amount} visibleSign={true}></Currency>
+			</p>
+		</>
+	);
+}
+
+export function AccountExpenseItem({
+	name,
+	date,
+	amount,
+}: {
+	name: string;
+	date: Date;
+	amount: number;
+}) {
+	return (
+		<>
+			<div className="flex-1 space-y-1">
+				<p className="text-md font-medium text-foreground">{name}</p>
+			</div>
+			<p className="text-md">
+				<Currency value={amount} visibleSign={true}></Currency>
+			</p>
+			<p className="text-sm font-bold text-input">
+				{date.toLocaleDateString('en-US', {
+					month: 'long',
+					day: 'numeric',
+				})}
+			</p>
+		</>
+	);
+}
+
+export function CategoryExpenseItem({
+	name,
+	date,
+	amount,
+}: {
+	name: string;
+	date: Date;
+	amount: number;
+}) {
+	return (
+		<>
+			<div className="flex-1 space-y-1 gap-1">
+				<DynamicIcon name="dot" />
+				<p className="text-sm font-bold text-input">
+					{date.toLocaleDateString('en-US', {
+						month: 'long',
+						day: 'numeric',
+					})}
+				</p>
+				<p className="text-md font-medium text-foreground">{name}</p>
+			</div>
+			<p className="text-md">
+				<Currency value={amount} visibleSign={true}></Currency>
+			</p>
+		</>
 	);
 }

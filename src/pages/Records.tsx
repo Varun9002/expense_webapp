@@ -1,4 +1,4 @@
-import { ExpenseItem } from '@/components/ExpenseItem';
+import { ExpenseItem, RecordExpenseItem } from '@/components/ExpenseItem';
 import { Button } from '@/components/ui/button';
 import Currency from '@/components/ui/currency';
 import { MonthPicker } from '@/components/ui/monthpicker';
@@ -160,6 +160,7 @@ export default function Records() {
 								return (
 									<ExpenseItem
 										expense={acc}
+										iconName="archive"
 										id={acc.id}
 										key={acc.id}
 										editHandler={handleEdit}
@@ -172,7 +173,13 @@ export default function Records() {
 													i - 1
 												].date.toLocaleDateString()
 										}
-									/>
+									>
+										<RecordExpenseItem
+											name={acc.name}
+											amount={acc.amount}
+											accName={acc.account.name}
+										/>
+									</ExpenseItem>
 								);
 							})}
 						</div>
