@@ -33,13 +33,13 @@ export const clearAccount = async () => {
 	const initAccounts: Account[] = [
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
-			name: 'Account 1',
+			name: 'Kotak',
 			intialAmount: 100,
 			trackedAmount: 11,
 		},
 		{
 			id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
-			name: 'Account 2',
+			name: 'HDFC',
 			intialAmount: 0,
 			trackedAmount: 11,
 		},
@@ -54,42 +54,42 @@ export const clearExpense = async () => {
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
 			amount: -22.2,
 			category_id: 'de2440a4-effc-43ae-8c53-b278e5574424',
-			account_id: '6d71b1bd-f1e3-4eb8-8766-1c1011d1e550',
+			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
 			date: new Date(),
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a2',
 			amount: 42.2,
 			category_id: 'cbda628e-7109-4a6d-8279-eae0fe80fffd',
-			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
+			account_id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
 			date: new Date(2025, 4, 11),
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
 			amount: -22.2,
 			category_id: 'dd76c2d0-bb2f-4194-b1dc-f702bbe47efe',
-			account_id: '6d71b1bd-f1e3-4eb8-8766-1c1011d1e550',
+			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
 			date: new Date(),
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a1',
 			amount: 42.2,
 			category_id: 'cbda628e-7109-4a6d-8279-eae0fe80fffd',
-			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
+			account_id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
 			date: new Date(2025, 4, 11),
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b3',
 			amount: -22.2,
 			category_id: 'dd76c2d0-bb2f-4194-b1dc-f702bbe47efe',
-			account_id: '6d71b1bd-f1e3-4eb8-8766-1c1011d1e550',
+			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
 			date: new Date(),
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a3',
 			amount: 42.2,
 			category_id: 'ca8998cd-8f0f-41fa-b1b3-9318f13a3f98',
-			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
+			account_id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
 			date: new Date(2025, 4, 11),
 		},
 	];
@@ -122,7 +122,7 @@ export const getExpensesByMonth = async (date: Date) => {
 		const catId = exp.category_id;
 		const acc = accounts.filter((ac) => ac.id === accId)[0] || {
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
-			name: 'Account 1',
+			name: 'Unknown Account',
 			intialAmount: 100,
 			trackedAmount: 11,
 		};
@@ -224,7 +224,7 @@ export const getExpensesByCategory = async (catId: UUID) => {
 		const id = exp.account_id;
 		const acc = accounts.filter((ac) => ac.id === id)[0] || {
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
-			name: 'Unknown',
+			name: 'Unknown Account',
 			intialAmount: 100,
 			trackedAmount: 11,
 		};
