@@ -1,39 +1,39 @@
-import { AccountEdit } from '@/components/AccountEdit';
-import AccountExpense from '@/components/AccountExpense';
-import { AccountItem } from '@/components/AccountItem';
+import { CategoryEdit } from '@/components/CategoryEdit';
+import CategoryExpense from '@/components/CategoryExpense';
+import { CategoryItem } from '@/components/CategoryItem';
 import { Button } from '@/components/ui/button';
 import Currency from '@/components/ui/currency';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import {
-	clearAccount,
-	deleteAccount,
-	getAccount,
+	clearCategory,
+	deleteCategory,
+	getCategory,
 	getExpenseStatus,
-	newAccount,
-	updateAccount,
+	newCategory,
+	updateCategory,
 } from '@/lib/db_helpers';
-import { Account } from '@/lib/db_schema';
+import { Category } from '@/lib/db_schema';
 import { UUID } from 'crypto';
 import { CircleAlertIcon, SquarePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function Accounts() {
+export default function Categories() {
 	const [expenseTotal, setExpenseTotal] = useState(0);
 	const [incomeTotal, setIncomeTotal] = useState(0);
 	const allAccountTotal = incomeTotal - expenseTotal;
-	const [accounts, setAccounts] = useState<Account[]>([]);
+	const [categories, setCategories] = useState<Category[]>([]);
 	const [isExpenseView, setIsExpenseView] = useState(false);
-	const [editItem, setEditItem] = useState<Account | null>(null);
+	const [editItem, setEditItem] = useState<Category | null>(null);
 	const [isEditOpen, setIsEditOpen] = useState(false);
 	const [selectedAccId, setSelectedAccId] = useState<UUID | null>(null);
 
 	useEffect(() => {
-		clearAccount()
-			.then(() => getAccount())
-			.then((acc) => {
-				setAccounts(acc);
+		clearCategory()
+			.then(() => getCategory())
+			.then((cat) => {
+				setCategories(cat);
 				return getExpenseStatus();
 			})
 			.then(({ earn, spent }) => {
@@ -42,15 +42,14 @@ export default function Accounts() {
 			});
 	}, []);
 
-	async function onEditSave(updAccount: Account) {
-		await updateAccount(updAccount);
-		const filtetAcc = await getAccount();
-
-		setAccounts(filtetAcc);
+	async function onEditSave(updCategory: Category) {
+		await updateCategory(updCategory);
+		const filtetAcc = await getCategory();
+		setCategories(filtetAcc);
 		handleIsEditOpen(false);
 	}
 	function handleEdit(id: UUID) {
-		const filterAcc = accounts.filter((acc) => {
+		const filterAcc = categories.filter((acc) => {
 			return acc.id === id;
 		});
 		if (filterAcc.length > 0) {
@@ -58,7 +57,7 @@ export default function Accounts() {
 			setIsEditOpen(true);
 		} else {
 			toast('Unexpected error encountered', {
-				description: 'Cannot find selected Account',
+				description: 'Cannot find selected Category',
 				action: {
 					label: 'Close',
 					onClick: () => {},
@@ -70,10 +69,9 @@ export default function Accounts() {
 		}
 	}
 	async function handleDelete(id: UUID) {
-		await deleteAccount(id);
-		const filtetAcc = await getAccount();
-
-		setAccounts(filtetAcc);
+		await deleteCategory(id);
+		const filtetAcc = await getCategory();
+		setCategories(filtetAcc);
 	}
 	function handleIsEditOpen(b: boolean) {
 		if (b) {
@@ -85,7 +83,7 @@ export default function Accounts() {
 		}
 	}
 	async function handleNewClick() {
-		const acc = newAccount();
+		const acc = newCategory();
 		setEditItem(acc);
 		setIsEditOpen(true);
 	}
@@ -113,13 +111,11 @@ export default function Accounts() {
 				<ScrollArea className="h-full pb-14 w-full">
 					<div className="flex flex-col justify-center items-center mt-12 ">
 						<div className="max-w-xl w-full sm:min-w-lg flex flex-col gap-4">
-							{accounts.map((acc) => {
+							{categories.map((acc) => {
 								return (
-									<AccountItem
+									<CategoryItem
 										name={acc.name}
-										amount={
-											acc.intialAmount + acc.trackedAmount
-										}
+										iconName={acc.symbol}
 										id={acc.id}
 										key={acc.id}
 										editHandler={handleEdit}
@@ -142,7 +138,7 @@ export default function Accounts() {
 				</ScrollArea>
 			</div>
 			{editItem !== null && (
-				<AccountEdit
+				<CategoryEdit
 					isOpen={isEditOpen}
 					setIsOpen={handleIsEditOpen}
 					editItem={editItem}
@@ -150,11 +146,11 @@ export default function Accounts() {
 				/>
 			)}
 			{isExpenseView && selectedAccId && (
-				<AccountExpense
+				<CategoryExpense
 					isOpen={isExpenseView}
-					accId={selectedAccId}
+					categoryId={selectedAccId}
 					setIsOpen={setIsExpenseView}
-				></AccountExpense>
+				></CategoryExpense>
 			)}
 		</>
 	);

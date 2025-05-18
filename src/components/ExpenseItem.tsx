@@ -114,15 +114,14 @@ export function CategoryExpenseItem({
 }) {
 	return (
 		<>
-			<div className="flex-1 space-y-1 gap-1">
-				<DynamicIcon name="dot" />
-				<p className="text-sm font-bold text-input">
+			<div className="flex grow">
+				<p className=" font-bold text-foreground text-md">
 					{date.toLocaleDateString('en-US', {
 						month: 'long',
 						day: 'numeric',
 					})}
 				</p>
-				<p className="text-md font-medium text-foreground">{name}</p>
+				<p className="text-md font-bold text-primary ml-3">{name}</p>
 			</div>
 			<p className="text-md">
 				<Currency value={amount} visibleSign={true}></Currency>

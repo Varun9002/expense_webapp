@@ -1,30 +1,30 @@
-import { getExpensesByAccount } from '@/lib/db_helpers';
-import { Category, Expense } from '@/lib/db_schema';
+import { getExpensesByCategory } from '@/lib/db_helpers';
+import { Account, Expense } from '@/lib/db_schema';
 import { UUID } from 'crypto';
 import { useEffect, useState } from 'react';
-import { AccountExpenseItem, ExpenseItem } from './ExpenseItem';
+import { CategoryExpenseItem, ExpenseItem } from './ExpenseItem';
 import { ScrollArea } from './ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
 
-type AccountExpenseProp = {
+type CategoryExpenseProp = {
 	isOpen: boolean;
 	setIsOpen: (b: boolean) => void;
-	accId: UUID;
+	categoryId: UUID;
 };
-export default function AccountExpense({
+export default function CategoryExpense({
 	isOpen,
 	setIsOpen,
-	accId,
-}: AccountExpenseProp) {
+	categoryId,
+}: CategoryExpenseProp) {
 	const [expenses, setExpenses] = useState<
-		(Expense & { category: Category })[]
+		(Expense & { account: Account })[]
 	>([]);
 
 	useEffect(() => {
-		getExpensesByAccount(accId).then((exp) => {
+		getExpensesByCategory(categoryId).then((exp) => {
 			setExpenses(exp);
 		});
-	}, [accId]);
+	}, [categoryId]);
 
 	function handleEdit() {}
 	function handleDelete() {}
@@ -35,7 +35,7 @@ export default function AccountExpense({
 				side="bottom"
 			>
 				<SheetHeader className="text-2xl bg-accent">
-					<SheetTitle>Acount Details</SheetTitle>
+					<SheetTitle>Category Expenses</SheetTitle>
 				</SheetHeader>
 
 				<div className="overflow-y-hidden">
@@ -46,7 +46,7 @@ export default function AccountExpense({
 									return (
 										<ExpenseItem
 											expense={acc}
-											iconName={acc.category.symbol}
+											iconName="dot"
 											id={acc.id}
 											key={acc.id}
 											editHandler={handleEdit}
@@ -72,8 +72,8 @@ export default function AccountExpense({
 													)
 											}
 										>
-											<AccountExpenseItem
-												name={acc.category.name}
+											<CategoryExpenseItem
+												name={acc.account.name}
 												date={acc.date}
 												amount={acc.amount}
 											/>

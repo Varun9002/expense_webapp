@@ -22,7 +22,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { clearExpense, getExpensesByMonth } from '@/lib/db_helpers';
-import { Account, Expense } from '@/lib/db_schema';
+import { Account, Category, Expense } from '@/lib/db_schema';
 import { cn } from '@/lib/utils';
 import { UUID } from 'crypto';
 import { CalendarIcon, Plus } from 'lucide-react';
@@ -37,7 +37,9 @@ export default function Records() {
 	const [expEditId, setExpEditId] = useState<UUID | undefined>(
 		'5fd0857c-6181-494f-bd2c-b69126d175a3'
 	);
-	const [exp, setExp] = useState<(Expense & { account: Account })[]>([]);
+	const [exp, setExp] = useState<
+		(Expense & { account: Account; category: Category })[]
+	>([]);
 
 	useEffect(() => {
 		clearExpense()
@@ -69,6 +71,7 @@ export default function Records() {
 	};
 	function handleEdit(id: UUID | null) {
 		console.log(id);
+		setExpEditId;
 		// const filterAcc = exp.filter((acc) => {
 		// 	return acc.id === id;
 		// });
@@ -160,7 +163,7 @@ export default function Records() {
 								return (
 									<ExpenseItem
 										expense={acc}
-										iconName="archive"
+										iconName={acc.category.symbol}
 										id={acc.id}
 										key={acc.id}
 										editHandler={handleEdit}
@@ -175,7 +178,7 @@ export default function Records() {
 										}
 									>
 										<RecordExpenseItem
-											name={acc.name}
+											name={acc.category.name}
 											amount={acc.amount}
 											accName={acc.account.name}
 										/>
