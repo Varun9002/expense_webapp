@@ -183,9 +183,7 @@ export default function ExpenseEdit({
                             placeholder="Note"
                             value={expense?.note}
                             rows={9}></Textarea>
-                        <Calculator
-                            value={calAmount}
-                            setValue={setCalAmount}></Calculator>
+                        <Calculator value={calAmount} setValue={setCalAmount} />
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
@@ -203,7 +201,7 @@ export default function ExpenseEdit({
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent
-                                className="w-auto p-0"
+                                className="w-auto p-0 z-50 pointer-events-auto"
                                 align="start">
                                 <Calendar
                                     mode="single"

@@ -15,7 +15,7 @@ export default function ItemSelectSheet({
 }) {
     return (
         <Sheet>
-            <SheetTrigger className="grow basis-1/2">
+            <SheetTrigger className="grow basis-1/2" asChild>
                 <Button variant="outline" className="py-6 w-full">
                     <DynamicIcon name={icon} className="size-7" />{" "}
                     <span className="text-lg">{triggerName}</span>
