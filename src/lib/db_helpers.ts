@@ -52,6 +52,7 @@ export const clearExpense = async () => {
 	const initExpenses: Expense[] = [
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
+			note: 'Test Note',
 			amount: -22.2,
 			category_id: 'de2440a4-effc-43ae-8c53-b278e5574424',
 			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
@@ -59,6 +60,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a2',
+			note: 'Test Note',
 			amount: 42.2,
 			category_id: 'cbda628e-7109-4a6d-8279-eae0fe80fffd',
 			account_id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
@@ -66,6 +68,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b1',
+			note: 'Test Note',
 			amount: -22.2,
 			category_id: 'dd76c2d0-bb2f-4194-b1dc-f702bbe47efe',
 			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
@@ -73,6 +76,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a1',
+			note: 'Test Note',
 			amount: 42.2,
 			category_id: 'cbda628e-7109-4a6d-8279-eae0fe80fffd',
 			account_id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
@@ -80,6 +84,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175b3',
+			note: 'Test Note',
 			amount: -22.2,
 			category_id: 'dd76c2d0-bb2f-4194-b1dc-f702bbe47efe',
 			account_id: '5fd0857c-6181-494f-bd2c-b69126d175b8',
@@ -87,6 +92,7 @@ export const clearExpense = async () => {
 		},
 		{
 			id: '5fd0857c-6181-494f-bd2c-b69126d175a3',
+			note: 'Test Note',
 			amount: 42.2,
 			category_id: 'ca8998cd-8f0f-41fa-b1b3-9318f13a3f98',
 			account_id: 'ea7ef766-a1a5-4239-9297-97a57c1b0f07',
