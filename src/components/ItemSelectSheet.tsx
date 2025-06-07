@@ -19,7 +19,7 @@ export default function ItemSelectSheet({
 }) {
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
-			<SheetTrigger className="grow basis-1/2" asChild>
+			<SheetTrigger className="shrink" asChild>
 				<Button variant="outline" className="py-6 w-full">
 					<DynamicIcon name={icon} className="size-7" />{' '}
 					<span className="text-lg">{triggerName}</span>

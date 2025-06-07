@@ -159,11 +159,11 @@ export default function ExpenseEdit({
 			}}
 		>
 			<SheetContent
-				className="h-dvh w-full [&>button:last-of-type>svg]:size-8 [&>button:last-of-type>svg]:cursor-pointer"
+				className="h-dvh w-full [&>button:last-of-type>svg]:size-8 [&>button:last-of-type>svg]:cursor-pointer [&>button]:top-2"
 				side="bottom"
 			>
-				<SheetHeader className="text-2xl bg-accent">
-					<SheetTitle>
+				<SheetHeader className="text-xl bg-accent p-2">
+					<SheetTitle className="">
 						<Button
 							className="text-xl font-light flex justify-center items-center gap-0 hover:text-primary cursor-pointer has-[>svg]:px-0"
 							variant={'ghost'}
@@ -176,7 +176,7 @@ export default function ExpenseEdit({
 				</SheetHeader>
 
 				<div className="flex flex-col justify-center items-center px-2">
-					<div className="max-w-xl w-full sm:min-w-lg flex flex-col gap-4">
+					<div className="max-w-xl w-full sm:min-w-lg flex flex-col gap-1">
 						<ToggleGroup
 							className="w-full "
 							type="single"
@@ -232,7 +232,7 @@ export default function ExpenseEdit({
 							</ToggleGroupItem>
 						</ToggleGroup>
 
-						<div className="flex justify-between items-center gap-2">
+						<div className="flex justify-between w-full items-center gap-2">
 							<ItemSelectSheet
 								icon="wallet"
 								triggerName={
