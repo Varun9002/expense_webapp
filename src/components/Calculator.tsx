@@ -20,13 +20,20 @@ export default function Calculator({
 	const [lastResult, setLastResult] = useState<number | 'Error' | null>(null);
 	const [pendingOperator, setPendingOperator] = useState<string | null>(null);
 	const [isNewInput, setIsNewInput] = useState(false);
+	const [isPendingUpdate, setIsPendingUpdate] = useState(2);
 
 	useEffect(() => {
-		setCurrentInput(value.toString());
-	}, []);
+		if (isPendingUpdate > 0) {
+			setCurrentInput(value.toString());
+			setIsPendingUpdate(isPendingUpdate - 1);
+		}
+	}, [value]);
 	useEffect(() => {
 		const evaluated = evalExpression();
-		if (evaluated !== 'Error') setValue(evaluated);
+		if (evaluated !== 'Error') {
+			setValue(evaluated);
+		}
+		console.log('currentInput');
 	}, [currentInput]);
 	const handleNumber = (num: string) => {
 		if (isNewInput || currentInput === '0') {
