@@ -42,13 +42,6 @@ export default function ExpenseEdit({
 	expId,
 	onClose,
 }: ExpenseEditProp) {
-	const [expense, setExpense] = useState<{
-		amount: number;
-		note: string;
-		category_id?: UUID;
-		account_id?: UUID;
-		date?: Date;
-	}>();
 	const [allCategory, setAllCategory] = useState<Category[]>([]);
 	const [allAccount, setAllAccount] = useState<Account[]>([]);
 	const [category, setCategory] = useState<Category>();
@@ -70,7 +63,6 @@ export default function ExpenseEdit({
 					setCalAmount(rest.amount);
 					setDate(rest.date);
 					setNote(rest.note);
-					setExpense(rest);
 					return Promise.all([
 						getCategoryById(rest.category_id),
 						getAccountByID(rest.account_id),

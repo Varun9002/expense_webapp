@@ -52,6 +52,7 @@ export default function AccountExpense({
 											editHandler={handleEdit}
 											deleteHandler={handleDelete}
 											grouping="monthly"
+											onClick={() => {}}
 											showDate={
 												i == 0 ||
 												acc.date.toLocaleDateString(
