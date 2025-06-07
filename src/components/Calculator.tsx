@@ -1,123 +1,133 @@
-import { Delete } from "lucide-react";
-import { useState } from "react";
-import { Button } from "./ui/button";
+import { Delete } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Button } from './ui/button';
 
 const buttons = [
-    ["+", "7", "8", "9"],
-    ["-", "4", "5", "6"],
-    ["*", "1", "2", "3"],
-    ["÷", "0", ".", "="],
+	['+', '7', '8', '9'],
+	['-', '4', '5', '6'],
+	['*', '1', '2', '3'],
+	['÷', '0', '.', '='],
 ];
 
 export default function Calculator({
-    value,
-    setValue,
+	value,
+	setValue,
 }: {
-    value: number;
-    setValue: React.Dispatch<React.SetStateAction<number>>;
+	value: number;
+	setValue: React.Dispatch<React.SetStateAction<number>>;
 }) {
-    const [currentInput, setCurrentInput] = useState(value.toString());
-    const [lastResult, setLastResult] = useState<number | "Error" | null>(null);
-    const [pendingOperator, setPendingOperator] = useState<string | null>(null);
-    const [isNewInput, setIsNewInput] = useState(false);
+	const [currentInput, setCurrentInput] = useState('0');
+	const [lastResult, setLastResult] = useState<number | 'Error' | null>(null);
+	const [pendingOperator, setPendingOperator] = useState<string | null>(null);
+	const [isNewInput, setIsNewInput] = useState(false);
 
-    const handleNumber = (num: string) => {
-        if (isNewInput || currentInput === "0") {
-            setCurrentInput(num);
-            setIsNewInput(false);
-        } else {
-            setCurrentInput(currentInput + num);
-        }
-        const evaluated = evalExpression();
-        if (evaluated !== "Error") setValue(evaluated);
-    };
+	useEffect(() => {
+		setCurrentInput(value.toString());
+	}, []);
+	useEffect(() => {
+		const evaluated = evalExpression();
+		if (evaluated !== 'Error') setValue(evaluated);
+	}, [currentInput]);
+	const handleNumber = (num: string) => {
+		if (isNewInput || currentInput === '0') {
+			setCurrentInput(num);
+			setIsNewInput(false);
+		} else {
+			setCurrentInput(currentInput + num);
+		}
+		const evaluated = evalExpression();
+		if (evaluated !== 'Error') setValue(evaluated);
+	};
 
-    const handleOperator = (operator: string) => {
-        const evaluated = evalExpression();
+	const handleOperator = (operator: string) => {
+		const evaluated = evalExpression();
 
-        setLastResult(evaluated);
-        if (evaluated !== "Error") setValue(evaluated);
-        setPendingOperator(operator);
-        setCurrentInput(evaluated.toString());
-        setIsNewInput(true);
-    };
+		setLastResult(evaluated);
+		if (evaluated !== 'Error') setValue(evaluated);
+		setPendingOperator(operator);
+		setCurrentInput(evaluated.toString());
+		setIsNewInput(true);
+	};
 
-    const evalExpression = () => {
-        const lhs = lastResult !== null ? lastResult : parseFloat(currentInput);
-        const rhs = parseFloat(currentInput);
+	const evalExpression = () => {
+		const lhs = lastResult !== null ? lastResult : parseFloat(currentInput);
+		const rhs = parseFloat(currentInput);
 
-        switch (pendingOperator) {
-            case "+":
-                return +lhs + +rhs;
-            case "-":
-                return +lhs - +rhs;
-            case "×":
-                return +lhs * +rhs;
-            case "÷":
-                return rhs !== 0 ? +lhs / +rhs : "Error";
-            default:
-                return lhs;
-        }
-    };
+		switch (pendingOperator) {
+			case '+':
+				return +lhs + +rhs;
+			case '-':
+				return +lhs - +rhs;
+			case '*':
+				return +lhs * +rhs;
+			case '÷':
+				return rhs !== 0 ? +lhs / +rhs : 'Error';
+			default:
+				return lhs;
+		}
+	};
 
-    const handleEquals = () => {
-        const result = evalExpression();
-        if (result !== "Error") setValue(result);
-        setCurrentInput(result.toString());
-        setLastResult(null);
-        setPendingOperator(null);
-        setIsNewInput(true);
-    };
+	const handleEquals = () => {
+		const result = evalExpression();
+		if (result !== 'Error') setValue(result);
+		setCurrentInput(result.toString());
+		setLastResult(null);
+		setPendingOperator(null);
+		setIsNewInput(true);
+	};
 
-    const handleClear = () => {
-        setCurrentInput("0");
-        setLastResult(null);
-        setPendingOperator(null);
-        setIsNewInput(false);
-    };
+	const handleClear = () => {
+		setCurrentInput('0');
+		setLastResult(null);
+		setPendingOperator(null);
+		setIsNewInput(false);
+	};
 
-    const handleClick = (value: string) => {
-        if (!isNaN(+value)) {
-            handleNumber(value);
-        } else if (value === ".") {
-            if (!currentInput.includes(".")) {
-                setCurrentInput(currentInput + ".");
-            }
-        } else if (value === "=") {
-            handleEquals();
-        } else {
-            handleOperator(value);
-        }
-    };
-    // const clearInput = () => {
-    //     setInput(input.slice(0, -1));
-    // };
+	const handleClick = (value: string) => {
+		if (!isNaN(+value)) {
+			handleNumber(value);
+		} else if (value === '.') {
+			if (!currentInput.includes('.')) {
+				setCurrentInput(currentInput + '.');
+			}
+		} else if (value === '=') {
+			handleEquals();
+		} else {
+			handleOperator(value);
+		}
+	};
+	// const clearInput = () => {
+	//     setInput(input.slice(0, -1));
+	// };
 
-    return (
-        <div className="w-full p-4 bg-accent rounded-lg shadow-md text-accent-foreground">
-            <div className="text-4xl! text-right mb-2 bg-background flex items-center">
-                <span className="grow mr-1">{currentInput}</span>{" "}
-                <Button
-                    className="px-2! py-9!"
-                    variant={"ghost"}
-                    onClick={handleClear}>
-                    <Delete className="size-8" />
-                </Button>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-                {buttons.flat().map((btn, index) => (
-                    <button
-                        key={index}
-                        className="p-4 bg-background rounded text-xl font-bold"
-                        onClick={() => {
-                            handleClick(btn);
-                        }}>
-                        {btn}
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
+	return (
+		<div className="w-full p-4 bg-accent rounded-lg shadow-md text-accent-foreground">
+			<div className="text-4xl! text-right mb-2 bg-background flex items-center">
+				<span className="mr-1">{pendingOperator}</span>
+				<span className="grow mr-1">{currentInput}</span>{' '}
+				<Button
+					className="px-2! py-9!"
+					variant={'ghost'}
+					onClick={handleClear}
+				>
+					<Delete className="size-8" />
+				</Button>
+			</div>
+			<div className="grid grid-cols-4 gap-2">
+				{buttons.flat().map((btn, index) => (
+					<button
+						key={index}
+						className="p-4 bg-background rounded text-xl font-bold"
+						onClick={() => {
+							handleClick(btn);
+						}}
+					>
+						{btn}
+					</button>
+				))}
+			</div>
+		</div>
+	);
 }
 
 // import { Button } from "@/components/ui/button";

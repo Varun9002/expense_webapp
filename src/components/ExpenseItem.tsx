@@ -13,6 +13,7 @@ type ItemBoxProps = {
 	id: UUID;
 	grouping: 'daily' | 'monthly';
 	children: ReactElement;
+	onClick: () => void;
 };
 export function ExpenseItem({
 	expense,
@@ -20,6 +21,7 @@ export function ExpenseItem({
 	grouping,
 	iconName,
 	children,
+	onClick,
 }: // editHandler,
 // id,
 // deleteHandler,
@@ -42,7 +44,7 @@ ItemBoxProps) {
 					)}
 				</div>
 			)}
-			<CardContent className="w-full px-0">
+			<CardContent className="w-full px-0" onClick={onClick}>
 				<div className=" flex items-center space-x-4 p-2 px-4 hover:bg-popover ">
 					<DynamicIcon name={iconName} />
 					{children}

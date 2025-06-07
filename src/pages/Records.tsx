@@ -34,9 +34,7 @@ export default function Records() {
 	const [date, setDate] = useState(new Date());
 	const [addBtn, setAddBtn] = useState(true);
 	const [isExpEditOpen, setIsExpEditOpen] = useState(false);
-	const [expEditId, setExpEditId] = useState<UUID | undefined>(
-		'5fd0857c-6181-494f-bd2c-b69126d175a3'
-	);
+	const [expEditId, setExpEditId] = useState<UUID | undefined>();
 	const [exp, setExp] = useState<
 		(Expense & { account: Account; category: Category })[]
 	>([]);
@@ -56,7 +54,7 @@ export default function Records() {
 				setIncomeTotal(earn);
 				setExpenseTotal(spent);
 			});
-	}, [date]);
+	}, [date, expEditId]);
 
 	const handleNextMonth = () => {
 		const nextMonth = new Date(date);
@@ -169,6 +167,10 @@ export default function Records() {
 										editHandler={handleEdit}
 										deleteHandler={handleDelete}
 										grouping="daily"
+										onClick={() => {
+											setExpEditId(acc.id);
+											setIsExpEditOpen(true);
+										}}
 										showDate={
 											i == 0 ||
 											acc.date.toLocaleDateString() !=
@@ -203,6 +205,7 @@ export default function Records() {
 							className="size-16 rounded-full"
 							onClick={() => {
 								setIsExpEditOpen(true);
+								setExpEditId(crypto.randomUUID());
 							}}
 						>
 							<Plus className="size-10" strokeWidth={4} />
@@ -210,11 +213,16 @@ export default function Records() {
 					</motion.div>
 				)}
 			</AnimatePresence>
-			<ExpenseEdit
-				isOpen={isExpEditOpen}
-				setIsOpen={setIsExpEditOpen}
-				expId={expEditId}
-			></ExpenseEdit>
+			{expEditId && (
+				<ExpenseEdit
+					isOpen={isExpEditOpen}
+					setIsOpen={setIsExpEditOpen}
+					expId={expEditId}
+					onClose={() => {
+						setExpEditId(undefined);
+					}}
+				></ExpenseEdit>
+			)}
 		</>
 	);
 }
