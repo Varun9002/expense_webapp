@@ -1,11 +1,11 @@
 import { Account, Category, db, Expense } from "@/lib/db_schema";
 import { UUID } from "crypto";
+import { toast } from "sonner";
 
 const dummyAccount: Account = {
     id: "1-1-1-1-1",
     name: "Unknown Account",
     intialAmount: 100,
-    trackedAmount: 11,
 };
 const dummyCategory: Category = {
     id: "1-1-1-1-1",
@@ -17,13 +17,11 @@ const initAccounts: Account[] = [
         id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
         name: "Kotak",
         intialAmount: 100,
-        trackedAmount: 11,
     },
     {
         id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
         name: "HDFC",
         intialAmount: 0,
-        trackedAmount: 11,
     },
 ];
 const initExpenses: Expense[] = [
@@ -109,7 +107,6 @@ export const newAccount = () => {
         id: id,
         name: "",
         intialAmount: 0,
-        trackedAmount: 0,
     };
     // await db.account.add(newItem);
     return newItem;
@@ -184,6 +181,25 @@ export const getExpensesByAccount = async (accId: UUID) => {
             categories.filter((ac) => ac.id === id)[0] || dummyCategory;
         return { ...exp, category: catg, account: acc };
     });
+};
+export const getAccountBalance = async (accId: UUID) => {
+    const acc = await getAccountByID(accId);
+    if (!acc) {
+        toast("Account not found for calculating balance");
+        return 0; // this should not happen, but just in case
+    }
+    const expenses = await db.expense
+        .where("account_id")
+        .equals(accId)
+        .toArray();
+    console.log(expenses);
+
+    const balance = expenses.reduce(
+        (sum, exp) => sum + exp.amount,
+        acc.intialAmount
+    );
+
+    return balance;
 };
 
 export const getExpenseStatus = async () => {
