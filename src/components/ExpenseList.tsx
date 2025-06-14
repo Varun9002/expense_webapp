@@ -27,9 +27,8 @@ export default function ExpenseList({
         acc: ExpenseWithAccountCategory,
         i: number
     ) {
-        let showDate = false;
         if (grouping == "monthly") {
-            showDate =
+            return (
                 i == 0 ||
                 acc.date.toLocaleDateString("en-US", {
                     month: "long",
@@ -38,15 +37,17 @@ export default function ExpenseList({
                     expenses[i - 1].date.toLocaleDateString("en-US", {
                         month: "long",
                         year: "numeric",
-                    });
-        } else if (grouping == "daily") {
-            showDate =
+                    })
+            );
+        }
+        if (grouping == "daily") {
+            return (
                 i === 0 ||
                 acc.date.toLocaleDateString() !==
-                    exp[i - 1].date.toLocaleDateString();
-            return showDate;
+                    exp[i - 1].date.toLocaleDateString()
+            );
         }
-        return showDate;
+        return false; // Default case, should not happen
     }
     return (
         <ScrollArea
@@ -60,12 +61,13 @@ export default function ExpenseList({
                 <div className="max-w-xl w-full sm:min-w-lg flex flex-col ">
                     {exp.map((acc, i) => (
                         <ExpenseItem
-                            expense={acc}
+                            date={
+                                isShowDate(exp, acc, i) ? acc.date : undefined
+                            }
                             iconName={acc.category.symbol}
                             key={acc.id}
                             grouping={grouping}
-                            onClick={() => {}}
-                            showDate={isShowDate(exp, acc, i)}>
+                            onClick={() => {}}>
                             <ItemComponent expense={acc} />
                         </ExpenseItem>
                     ))}

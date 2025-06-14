@@ -1,11 +1,10 @@
-import { Account, Expense } from "@/lib/db_schema";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
 import { ReactElement } from "react";
 import { CardContent } from "./ui/card";
 import Currency from "./ui/currency";
 import { ExpenseWithAccountCategory } from "./ExpenseList";
 type ItemBoxProps = {
-    expense: Expense & { account?: Account };
+    date: Date | undefined;
     iconName: IconName;
     showDate?: boolean;
     grouping: "daily" | "monthly";
@@ -13,8 +12,7 @@ type ItemBoxProps = {
     onClick: () => void;
 };
 export function ExpenseItem({
-    expense,
-    showDate,
+    date,
     grouping,
     iconName,
     children,
@@ -25,9 +23,9 @@ export function ExpenseItem({
 ItemBoxProps) {
     return (
         <div className="w-full last-of-type:mb-20">
-            {showDate && (
+            {date && (
                 <div className="border-b-1 border-muted-foreground text-muted-foreground text-lg font-bold p-1 ">
-                    {expense.date.toLocaleDateString(
+                    {date.toLocaleDateString(
                         "en-US",
                         grouping == "daily"
                             ? {
