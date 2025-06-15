@@ -110,8 +110,8 @@ export default function ExpenseEdit({
             toast("Please select Category");
         } else if (note === "") {
             toast("Please Fill Note");
-        } else if (calAmount === 0) {
-            toast("Please add amount");
+        } else if (calAmount <= 0) {
+            toast("Please add amount greater than 0");
         } else if (!date) {
             toast("Please Select Date");
         } else {
@@ -131,7 +131,7 @@ export default function ExpenseEdit({
                     type: selectedValue,
                     account_id: account1.id,
                     category_id: category.id,
-                    amount: selectedValue == "income" ? calAmount : -calAmount,
+                    amount: calAmount,
                     date: date,
                     note: note,
                 };
