@@ -66,6 +66,7 @@ export default function ExpenseEdit({
                     setCalAmount(rest.amount);
                     setDate(rest.date);
                     setNote(rest.note);
+                    setSelectedValue(rest.type);
                     return Promise.all([
                         getCategoryById(rest.category_id),
                         getAccountByID(rest.account_id),

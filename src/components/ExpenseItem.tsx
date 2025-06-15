@@ -58,10 +58,14 @@ export function RecordExpenseItem({
         <>
             <div className="flex-1 space-y-1">
                 <p className="text-md font-medium text-foreground">
-                    {expense.category.name}
+                    {expense.type === "transfer"
+                        ? "Transfer"
+                        : expense.category.name}
                 </p>
                 <p className=" flex gap-2 text-sm text-muted-foreground">
-                    {expense.account.name}
+                    {expense.type === "transfer"
+                        ? expense.category.name
+                        : expense.account.name}
                 </p>
             </div>
             <p className="text-md">
