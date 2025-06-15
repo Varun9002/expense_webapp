@@ -235,7 +235,9 @@ export const getExpenseStatus = async () => {
 export const getExpenseById = async (id: UUID) => {
     return await db.expense.get(id);
 };
-
+export const deleteExpense = async (id: UUID) => {
+    return await db.expense.delete(id);
+};
 export const updateExpense = async (exp: Expense) => {
     return await db.expense.put(exp);
 };

@@ -74,7 +74,8 @@ export function AccountItem({
                                 onClick={(event) => {
                                     event.stopPropagation();
                                     setTimeout(() => {
-                                        deleteHandler(id);
+                                        if (confirm("Are you sure"))
+                                            deleteHandler(id);
                                     }, 0);
                                 }}>
                                 <Trash2 />

@@ -70,14 +70,16 @@ export default function ExpenseEdit({
                     return Promise.all([
                         getCategoryById(rest.category_id),
                         getAccountByID(rest.account_id),
+                        getAccountByID(rest.category_id),
                     ]);
                 }
             })
             .then((res) => {
                 if (res) {
-                    const [cat, acc] = res;
+                    const [cat, acc, acc2] = res;
                     if (cat) setCategory(cat);
                     if (acc) setAccount1(acc);
+                    if (acc2) setAccount2(acc2);
                 }
             });
         getAccount().then((acc) => {

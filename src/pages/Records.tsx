@@ -38,6 +38,7 @@ export default function Records() {
     const [exp, setExp] = useState<
         (Expense & { account: Account; category: Category })[]
     >([]);
+    const [signal, setSignal] = useState(false);
 
     useEffect(() => {
         clearExpense()
@@ -60,7 +61,7 @@ export default function Records() {
                 setIncomeTotal(earn);
                 setExpenseTotal(spent);
             });
-    }, [date, expEditId]);
+    }, [date, expEditId, signal]);
 
     const handleNextMonth = () => {
         const nextMonth = new Date(date);
@@ -143,6 +144,7 @@ export default function Records() {
                     className="h-full pb-18 w-full"
                     setAddBtn={setAddBtn}
                     ItemComponent={RecordExpenseItem}
+                    triggerRerender={setSignal}
                 />
             </div>
             <AnimatePresence>

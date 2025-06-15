@@ -16,12 +16,12 @@ export default function AccountExpense({
     accId,
 }: AccountExpenseProp) {
     const [expenses, setExpenses] = useState<ExpenseWithAccountCategory[]>([]);
-
+    const [signal, setSignal] = useState(false);
     useEffect(() => {
         getExpensesByAccount(accId).then((exp) => {
             setExpenses(exp);
         });
-    }, [accId]);
+    }, [accId, signal]);
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -38,6 +38,7 @@ export default function AccountExpense({
                         grouping="monthly"
                         className="h-full pb-18 w-full"
                         ItemComponent={AccountExpenseItem}
+                        triggerRerender={setSignal}
                     />
                 </div>
             </SheetContent>
