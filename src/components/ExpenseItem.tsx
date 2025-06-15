@@ -95,7 +95,7 @@ export function AccountExpenseItem({
                         expense.account.id === expense.account_id
                     }></Currency>
             </p>
-            <p className="text-sm font-bold text-input">
+            <p className="text-sm font-bold text-muted-foreground">
                 {expense.date.toLocaleDateString("en-US", {
                     month: "long",
                     day: "numeric",
