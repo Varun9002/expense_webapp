@@ -61,7 +61,7 @@ export default function App() {
                             className="cursor-pointer hover:bg-foreground hover:text-background"
                             onClick={()=>{exportData().then(()=>{
                                 toast("Data exported")
-                            })}}>
+                            }).catch((err:Error)=>{toast(`error ${err.message}`)})}}>
                             <FileUp />
                             Export
                         </Button>
