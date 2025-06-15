@@ -136,7 +136,7 @@ export default function Categories() {
                         <Button
                             className="my-10 cursor-pointer"
                             onClick={handleNewClick}>
-                            <SquarePlus /> Add New Account
+                            <SquarePlus /> Add New Category
                         </Button>
                     </div>
                 </ScrollArea>

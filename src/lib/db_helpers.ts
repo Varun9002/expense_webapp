@@ -295,3 +295,26 @@ Income
 <Wallet /> -- salary
 <HandCoins /> -- Rewards / interests
 */
+
+// importData.ts
+export async function exportData() {
+    const exportObject = {
+        expense: await db.expense.toArray(),
+        account: await db.account.toArray(),
+        category: await db.category.toArray(),
+    };
+    const data = JSON.stringify(exportObject, null, 2); // Pretty-printed JSON
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "export.json";
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+}
+

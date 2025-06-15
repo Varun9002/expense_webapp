@@ -12,6 +12,8 @@ import "./App.css";
 import Nav, { NavProps } from "./components/navigation/Navbar";
 import { Button } from "./components/ui/button";
 import { Toaster } from "./components/ui/sonner";
+import { exportData } from "./lib/db_helpers";
+import { toast } from "sonner";
 const navitems: NavProps = {
     items: [
         {
@@ -56,7 +58,10 @@ export default function App() {
                         </Button>
                         <Button
                             variant={"secondary"}
-                            className="cursor-pointer hover:bg-foreground hover:text-background">
+                            className="cursor-pointer hover:bg-foreground hover:text-background"
+                            onClick={()=>{exportData().then(()=>{
+                                toast("Data exported")
+                            })}}>
                             <FileUp />
                             Export
                         </Button>
