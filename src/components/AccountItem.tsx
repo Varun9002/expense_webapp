@@ -43,7 +43,10 @@ export function AccountItem({
                             {name}
                         </p>
                         <p className="text-sm font-medium">
-                            Balance: <Currency value={totalAmount}></Currency>
+                            Balance:{" "}
+                            <Currency
+                                type="auto"
+                                value={totalAmount}></Currency>
                         </p>
                     </div>
 

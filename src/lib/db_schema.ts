@@ -9,6 +9,7 @@ interface Account {
 
 interface Expense {
     id: UUID;
+    type: string;
     amount: number;
     note: string;
     category_id: UUID;
@@ -31,7 +32,7 @@ const db = new Dexie("ExpenseDb") as Dexie & {
 // Schema declaration:
 db.version(1).stores({
     account: "++id, name, intialAmount ",
-    expense: "++id, amount, note, category_id,account_id, date ",
+    expense: "++id, type, amount, note, category_id,account_id, date ",
     category: "++id, name, symbol",
 });
 

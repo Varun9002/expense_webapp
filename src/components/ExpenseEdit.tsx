@@ -113,6 +113,7 @@ export default function ExpenseEdit({
             if (selectedValue === "transfer" && account2) {
                 exp = {
                     id: expId,
+                    type: selectedValue,
                     account_id: account1.id,
                     category_id: account2.id,
                     amount: calAmount,
@@ -122,6 +123,7 @@ export default function ExpenseEdit({
             } else if (selectedValue !== "transfer" && category) {
                 exp = {
                     id: expId,
+                    type: selectedValue,
                     account_id: account1.id,
                     category_id: category.id,
                     amount: selectedValue == "income" ? calAmount : -calAmount,

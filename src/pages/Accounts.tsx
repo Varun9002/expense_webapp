@@ -94,17 +94,22 @@ export default function Accounts() {
             <div className="w-full flex justify-center z-11 mt-5 ">
                 <div className="flex flex-col w-full max-w-3xl">
                     <h3 className="text-center">
-                        [ All Accounts <Currency value={allAccountTotal} />]
+                        [ All Accounts{" "}
+                        <Currency type="auto" value={allAccountTotal} />]
                     </h3>
                     <div className="flex justify-around pt-5">
                         <div className="flex flex-col justify-center items-center">
                             <h1 className="text-sm">EXPENSE SO FAR</h1>
-                            <Currency value={expenseTotal}></Currency>
+                            <Currency
+                                type="expense"
+                                value={expenseTotal}></Currency>
                         </div>
                         <Separator orientation="vertical" />
                         <div className="flex flex-col justify-center items-center">
                             <h1 className="text-sm">INCOME SO FAR</h1>
-                            <Currency value={incomeTotal}></Currency>
+                            <Currency
+                                type="income"
+                                value={incomeTotal}></Currency>
                         </div>
                     </div>
                 </div>

@@ -45,10 +45,16 @@ export default function Records() {
             .then((ex) => {
                 setExp(ex);
                 const { spent, earn } = ex.reduce(
-                    (acc, e) =>
-                        e.amount > 0
-                            ? { ...acc, earn: acc.earn + e.amount }
-                            : { ...acc, spent: acc.spent - e.amount },
+                    (acc, e) => {
+                        if (e.type === "income") {
+                            return { ...acc, earn: acc.earn + e.amount };
+                        } else if (e.type === "expense") {
+                            return { ...acc, spent: acc.spent - e.amount };
+                        } else {
+                            // For "transfer" or any other type, do nothing
+                            return acc;
+                        }
+                    },
                     { spent: 0, earn: 0 }
                 );
                 setIncomeTotal(earn);
@@ -116,12 +122,16 @@ export default function Records() {
                     <div className="flex justify-around pt-5">
                         <div className="flex flex-col justify-center items-center">
                             <h1 className="text-sm">EXPENSE</h1>
-                            <Currency value={-expenseTotal}></Currency>
+                            <Currency
+                                type="expense"
+                                value={-expenseTotal}></Currency>
                         </div>
                         <Separator orientation={"vertical"} />
                         <div className="flex flex-col justify-center items-center">
                             <h1 className="text-sm">INCOME</h1>
-                            <Currency value={incomeTotal}></Currency>
+                            <Currency
+                                type="income"
+                                value={incomeTotal}></Currency>
                         </div>
                     </div>
                 </div>

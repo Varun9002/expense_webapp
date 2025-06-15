@@ -65,7 +65,10 @@ export function RecordExpenseItem({
                 </p>
             </div>
             <p className="text-md">
-                <Currency value={expense.amount} visibleSign={true}></Currency>
+                <Currency
+                    value={expense.amount}
+                    type={expense.type}
+                    visibleSign={true}></Currency>
             </p>
         </>
     );
@@ -84,7 +87,13 @@ export function AccountExpenseItem({
                 </p>
             </div>
             <p className="text-md">
-                <Currency value={expense.amount} visibleSign={true}></Currency>
+                <Currency
+                    value={expense.amount}
+                    type={expense.type}
+                    visibleSign={true}
+                    transferOut={
+                        expense.account.id === expense.account_id
+                    }></Currency>
             </p>
             <p className="text-sm font-bold text-input">
                 {expense.date.toLocaleDateString("en-US", {
@@ -121,7 +130,10 @@ export function CategoryExpenseItem({
                 </p>
             </div>
             <p className="text-md">
-                <Currency value={expense.amount} visibleSign={true}></Currency>
+                <Currency
+                    value={expense.amount}
+                    type={expense.type}
+                    visibleSign={true}></Currency>
             </p>
         </>
     );

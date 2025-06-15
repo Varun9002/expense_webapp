@@ -1,16 +1,38 @@
 export default function Currency({
-	value,
-	visibleSign,
+    value,
+    type,
+    visibleSign,
+    transferOut,
 }: {
-	value: number;
-	visibleSign?: boolean;
+    value: number;
+    type: string;
+    visibleSign?: boolean;
+    transferOut?: boolean;
 }) {
-	return (
-		<span className={value >= 0 ? 'text-emerald-400' : 'text-red-500'}>
-			{(visibleSign ? value : Math.abs(value)).toLocaleString('en-US', {
-				style: 'currency',
-				currency: 'INR',
-			})}
-		</span>
-	);
+    let color = "";
+    let signValue = value;
+    if (type === "income") {
+        color = "text-emerald-400";
+    } else if (type === "expense") {
+        color = "text-red-500";
+        signValue = -value;
+    } else if (type == "transfer") {
+        color = "text-blue-400";
+        signValue = transferOut ? -value : value;
+    } else if (type === "auto") {
+        if (value >= 0) {
+            color = "text-emerald-400";
+        } else {
+            color = "text-red-500";
+            signValue = -value;
+        }
+    }
+    return (
+        <span className={color}>
+            {(visibleSign ? signValue : value).toLocaleString("en-US", {
+                style: "currency",
+                currency: "INR",
+            })}
+        </span>
+    );
 }

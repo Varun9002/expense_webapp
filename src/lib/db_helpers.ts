@@ -28,7 +28,8 @@ const initExpenses: Expense[] = [
     {
         id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
         note: "Test Note",
-        amount: -22.2,
+        type: "expense",
+        amount: 50,
         category_id: "de2440a4-effc-43ae-8c53-b278e5574424",
         account_id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
         date: new Date(),
@@ -36,42 +37,20 @@ const initExpenses: Expense[] = [
     {
         id: "5fd0857c-6181-494f-bd2c-b69126d175a2",
         note: "Test Note",
-        amount: 42.2,
+        type: "income",
+        amount: 50,
         category_id: "cbda628e-7109-4a6d-8279-eae0fe80fffd",
         account_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
-        date: new Date(2025, 4, 11),
+        date: new Date(),
     },
     {
         id: "5fd0857c-6181-494f-bd2c-b69126d175b1",
         note: "Test Note",
-        amount: -22.2,
-        category_id: "dd76c2d0-bb2f-4194-b1dc-f702bbe47efe",
+        type: "transfer",
+        amount: 50,
+        category_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
         account_id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
         date: new Date(),
-    },
-    {
-        id: "5fd0857c-6181-494f-bd2c-b69126d175a1",
-        note: "Test Note",
-        amount: 42.2,
-        category_id: "cbda628e-7109-4a6d-8279-eae0fe80fffd",
-        account_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
-        date: new Date(2025, 4, 11),
-    },
-    {
-        id: "5fd0857c-6181-494f-bd2c-b69126d175b3",
-        note: "Test Note",
-        amount: -22.2,
-        category_id: "dd76c2d0-bb2f-4194-b1dc-f702bbe47efe",
-        account_id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
-        date: new Date(),
-    },
-    {
-        id: "5fd0857c-6181-494f-bd2c-b69126d175a3",
-        note: "Test Note",
-        amount: 42.2,
-        category_id: "ca8998cd-8f0f-41fa-b1b3-9318f13a3f98",
-        account_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
-        date: new Date(2025, 4, 11),
     },
 ];
 
@@ -158,29 +137,53 @@ export const getExpensesByMonth = async (date: Date) => {
         .sortBy("date");
     const accounts = await getAccount();
     const categories = await getCategory();
-    return expenses.reverse().map((exp) => {
-        const accId = exp.account_id;
-        const catId = exp.category_id;
-        const acc = accounts.filter((ac) => ac.id === accId)[0] || dummyAccount;
-        const catg =
-            categories.filter((ac) => ac.id === catId)[0] || dummyCategory;
-        return { ...exp, account: acc, category: catg };
-    });
+    return await Promise.all(
+        expenses.reverse().map(async (exp) => {
+            const accId = exp.account_id;
+            const catId = exp.category_id;
+            const acc =
+                accounts.filter((ac) => ac.id === accId)[0] || dummyAccount;
+            if (exp.type === "transfer") {
+                const acc2 = (await getAccountByID(catId)) || dummyAccount;
+                const catg: Category = {
+                    id: "1-1-1-1-1",
+                    name: `[ ${acc.name} > ${acc2.name} ]`,
+                    symbol: "arrow-right-left",
+                };
+                return { ...exp, category: catg, account: acc };
+            }
+            const catg =
+                categories.filter((ac) => ac.id === catId)[0] || dummyCategory;
+            return { ...exp, account: acc, category: catg };
+        })
+    );
 };
 
 export const getExpensesByAccount = async (accId: UUID) => {
     const acc = (await getAccountByID(accId)) || dummyAccount;
     const expenses = await db.expense
-        .where("account_id")
+        .where({ category_id: accId, type: "transfer" })
+        .or("account_id")
         .equals(accId)
         .sortBy("date");
     const categories = await getCategory();
-    return expenses.reverse().map((exp) => {
-        const id = exp.category_id;
-        const catg =
-            categories.filter((ac) => ac.id === id)[0] || dummyCategory;
-        return { ...exp, category: catg, account: acc };
-    });
+    return await Promise.all(
+        expenses.reverse().map(async (exp) => {
+            const id = exp.category_id;
+            if (exp.type === "transfer") {
+                const acc2 = (await getAccountByID(id)) || dummyAccount;
+                const catg: Category = {
+                    id: "1-1-1-1-1",
+                    name: `[ ${acc.name} > ${acc2.name} ]`,
+                    symbol: "arrow-right-left",
+                };
+                return { ...exp, category: catg, account: acc };
+            }
+            const catg =
+                categories.filter((ac) => ac.id === id)[0] || dummyCategory;
+            return { ...exp, category: catg, account: acc };
+        })
+    );
 };
 export const getAccountBalance = async (accId: UUID) => {
     const acc = await getAccountByID(accId);
@@ -191,13 +194,21 @@ export const getAccountBalance = async (accId: UUID) => {
     const expenses = await db.expense
         .where("account_id")
         .equals(accId)
+        .or("category_id")
+        .equals(accId)
         .toArray();
     console.log(expenses);
-
-    const balance = expenses.reduce(
-        (sum, exp) => sum + exp.amount,
-        acc.intialAmount
-    );
+    const balance = expenses.reduce((sum, exp) => {
+        if (exp.type === "income") {
+            return sum + exp.amount;
+        } else if (exp.type === "expense") {
+            return sum - exp.amount;
+        } else if (exp.type === "transfer") {
+            if (accId === exp.account_id) return sum - exp.amount;
+            else if (accId === exp.category_id) return sum + exp.amount;
+        }
+        return sum;
+    }, acc.intialAmount);
 
     return balance;
 };
@@ -205,10 +216,18 @@ export const getAccountBalance = async (accId: UUID) => {
 export const getExpenseStatus = async () => {
     const expenses = await getExpenses();
     return expenses.reduce(
-        (acc, ex) =>
-            ex.amount > 0
-                ? { ...acc, earn: acc.earn + ex.amount }
-                : { ...acc, spent: acc.spent + ex.amount },
+        (acc, ex) => {
+            {
+                if (ex.type === "income") {
+                    return { ...acc, earn: acc.earn + ex.amount };
+                } else if (ex.type === "expense") {
+                    return { ...acc, spent: acc.spent - ex.amount };
+                } else {
+                    // For "transfer" or any other type, do nothing
+                    return acc;
+                }
+            }
+        },
         { earn: 0, spent: 0 }
     );
 };
