@@ -101,7 +101,7 @@ export function AccountExpenseItem({
             </p>
             <p className="text-sm font-bold text-muted-foreground">
                 {expense.date.toLocaleDateString("en-US", {
-                    month: "long",
+                    month: "short",
                     day: "numeric",
                 })}
             </p>
@@ -119,7 +119,7 @@ export function CategoryExpenseItem({
             <div className="flex grow">
                 <p className=" font-bold text-foreground text-md">
                     {expense.date.toLocaleDateString("en-US", {
-                        month: "long",
+                        month: "short",
                         day: "numeric",
                     })}
                 </p>
