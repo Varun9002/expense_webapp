@@ -1,6 +1,7 @@
 import { Account, Category, db, Expense } from "@/lib/db_schema";
 import { UUID } from "crypto";
 import { toast } from "sonner";
+import { saveAs } from "file-saver";
 
 const dummyAccount: Account = {
     id: "1-1-1-1-1",
@@ -304,17 +305,24 @@ export async function exportData() {
         category: await db.category.toArray(),
     };
     const data = JSON.stringify(exportObject, null, 2); // Pretty-printed JSON
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = "export.json";
-
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    URL.revokeObjectURL(url);
+    const blob = new Blob([data], { type: "application/json" });
+    saveAs(blob, "export.json");
 }
-
+export async function importData(data: {
+    expense: Expense[];
+    account: Account[];
+    category: Category[];
+}) {
+    await db.transaction(
+        "rw",
+        [db.expense, db.account, db.category],
+        async () => {
+            await db.expense.clear();
+            await db.expense.bulkAdd(data.expense);
+            await db.account.clear();
+            await db.account.bulkAdd(data.account);
+            await db.category.clear();
+            await db.category.bulkAdd(data.category);
+        }
+    );
+}

@@ -12,8 +12,10 @@ import "./App.css";
 import Nav, { NavProps } from "./components/navigation/Navbar";
 import { Button } from "./components/ui/button";
 import { Toaster } from "./components/ui/sonner";
-import { exportData } from "./lib/db_helpers";
+import { exportData, importData } from "./lib/db_helpers";
 import { toast } from "sonner";
+import { useRef } from "react";
+import { Account, Category, Expense } from "./lib/db_schema";
 const navitems: NavProps = {
     items: [
         {
@@ -40,7 +42,42 @@ const navitems: NavProps = {
 };
 
 export default function App() {
-    // const [count, setCount] = useState(0);
+    const inputFile = useRef<HTMLInputElement | null>(null);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if (file && file.type === "application/json") {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                try {
+                    const parsedData = JSON.parse(
+                        e.target?.result as string,
+                        (key: string, value: unknown) => {
+                            if (key === "date" && typeof value === "string") {
+                                return new Date(value);
+                            }
+                            return value;
+                        }
+                    ) as {
+                        expense: Expense[];
+                        account: Account[];
+                        category: Category[];
+                    };
+                    importData(parsedData);
+                } catch (err) {
+                    toast(`Error: ${err}`);
+                }
+            };
+            reader.onerror = () => {
+                toast("Error reading file"); // Set error message if file reading fails
+            };
+            reader.readAsText(file); // Read the file as text
+        } else {
+            toast("Please upload a valid JSON file");
+        }
+    };
 
     return (
         <>
@@ -52,16 +89,35 @@ export default function App() {
                     <div className=" flex gap-2 justify-center items-center px-2 sm:p-5">
                         <Button
                             variant={"secondary"}
-                            className="cursor-pointer hover:bg-foreground hover:text-background">
+                            className="cursor-pointer hover:bg-foreground hover:text-background"
+                            onClick={() => {
+                                if (inputFile.current) {
+                                    inputFile.current.click();
+                                }
+                            }}>
+                            <input
+                                type="file"
+                                id="file"
+                                accept=".json"
+                                ref={inputFile}
+                                style={{ display: "none" }}
+                                onChange={handleFileChange}
+                            />
                             <FileDown />
                             Import
                         </Button>
                         <Button
                             variant={"secondary"}
                             className="cursor-pointer hover:bg-foreground hover:text-background"
-                            onClick={()=>{exportData().then(()=>{
-                                toast("Data exported")
-                            }).catch((err:Error)=>{toast(`error ${err.message}`)})}}>
+                            onClick={() => {
+                                exportData()
+                                    .then(() => {
+                                        toast("Data exported");
+                                    })
+                                    .catch((err: Error) => {
+                                        toast(`error ${err.message}`);
+                                    });
+                            }}>
                             <FileUp />
                             Export
                         </Button>
