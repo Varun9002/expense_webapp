@@ -34,12 +34,14 @@ type ExpenseEditProp = {
     isOpen: boolean;
     setIsOpen: (b: boolean) => void;
     expId: UUID;
+    newDate?: Date;
     onClose: () => void;
 };
 export default function ExpenseEdit({
     isOpen,
     setIsOpen,
     expId,
+    newDate,
     onClose,
 }: ExpenseEditProp) {
     const [allCategory, setAllCategory] = useState<Category[]>([]);
@@ -50,7 +52,7 @@ export default function ExpenseEdit({
     const [selectOpen1, setselectOpen1] = useState<boolean>(false);
     const [selectOpen2, setselectOpen2] = useState<boolean>(false);
     const [selectOpen3, setselectOpen3] = useState<boolean>(false);
-    const [date, setDate] = useState<Date | undefined>(new Date());
+    const [date, setDate] = useState<Date | undefined>(newDate || new Date());
     const [note, setNote] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("income");
     const [calAmount, setCalAmount] = useState<number>(0);
@@ -360,6 +362,7 @@ export default function ExpenseEdit({
                                         navLayout="after"
                                         fixedWeeks
                                         showOutsideDays={false}
+                                        defaultMonth={date}
                                         selected={date}
                                         onSelect={(d: Date | undefined) => {
                                             if (d && date) {

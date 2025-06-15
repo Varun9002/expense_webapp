@@ -170,9 +170,11 @@ export default function Records() {
                     isOpen={isExpEditOpen}
                     setIsOpen={setIsExpEditOpen}
                     expId={expEditId}
+                    newDate={date}
                     onClose={() => {
                         setExpEditId(undefined);
-                    }}></ExpenseEdit>
+                    }}
+                />
             )}
         </>
     );
