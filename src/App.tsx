@@ -12,7 +12,7 @@ import "./App.css";
 import Nav, { NavProps } from "./components/navigation/Navbar";
 import { Button } from "./components/ui/button";
 import { Toaster } from "./components/ui/sonner";
-import { exportData, importData } from "./lib/db_helpers";
+import { clearCategory, exportData, importData } from "./lib/db_helpers";
 import { toast } from "sonner";
 import { useRef } from "react";
 import { Account, Category, Expense } from "./lib/db_schema";
@@ -42,6 +42,7 @@ const navitems: NavProps = {
 };
 
 export default function App() {
+    clearCategory().then(() => {});
     const inputFile = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -13,47 +13,47 @@ const dummyCategory: Category = {
     name: "Unknown",
     symbol: "ban",
 };
-const initAccounts: Account[] = [
-    {
-        id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
-        name: "Kotak",
-        intialAmount: 100,
-    },
-    {
-        id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
-        name: "HDFC",
-        intialAmount: 0,
-    },
-];
-const initExpenses: Expense[] = [
-    {
-        id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
-        note: "Test Note",
-        type: "expense",
-        amount: 50,
-        category_id: "de2440a4-effc-43ae-8c53-b278e5574424",
-        account_id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
-        date: new Date(),
-    },
-    {
-        id: "5fd0857c-6181-494f-bd2c-b69126d175a2",
-        note: "Test Note",
-        type: "income",
-        amount: 50,
-        category_id: "cbda628e-7109-4a6d-8279-eae0fe80fffd",
-        account_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
-        date: new Date(),
-    },
-    {
-        id: "5fd0857c-6181-494f-bd2c-b69126d175b1",
-        note: "Test Note",
-        type: "transfer",
-        amount: 50,
-        category_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
-        account_id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
-        date: new Date(),
-    },
-];
+// const initAccounts: Account[] = [
+//     {
+//         id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
+//         name: "Kotak",
+//         intialAmount: 100,
+//     },
+//     {
+//         id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
+//         name: "HDFC",
+//         intialAmount: 0,
+//     },
+// ];
+// const initExpenses: Expense[] = [
+//     {
+//         id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
+//         note: "Test Note",
+//         type: "expense",
+//         amount: 50,
+//         category_id: "de2440a4-effc-43ae-8c53-b278e5574424",
+//         account_id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
+//         date: new Date(),
+//     },
+//     {
+//         id: "5fd0857c-6181-494f-bd2c-b69126d175a2",
+//         note: "Test Note",
+//         type: "income",
+//         amount: 50,
+//         category_id: "cbda628e-7109-4a6d-8279-eae0fe80fffd",
+//         account_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
+//         date: new Date(),
+//     },
+//     {
+//         id: "5fd0857c-6181-494f-bd2c-b69126d175b1",
+//         note: "Test Note",
+//         type: "transfer",
+//         amount: 50,
+//         category_id: "ea7ef766-a1a5-4239-9297-97a57c1b0f07",
+//         account_id: "5fd0857c-6181-494f-bd2c-b69126d175b8",
+//         date: new Date(),
+//     },
+// ];
 
 const initCategory: Category[] = [
     {
@@ -109,14 +109,14 @@ export const deleteAccount = async (id: UUID) => {
 };
 
 export const clearAccount = async () => {
-    if ((await getAccount()).length == 0) {
-        await db.account.bulkPut(initAccounts);
-    }
+    // if ((await getAccount()).length == 0) {
+    //     await db.account.bulkPut([initAccounts]);
+    // }
 };
 export const clearExpense = async () => {
-    if ((await getExpenses()).length == 0) {
-        await db.expense.bulkPut(initExpenses);
-    }
+    // if ((await getExpenses()).length == 0) {
+    //     await db.expense.bulkPut(initExpenses);
+    // }
 };
 export const getExpenses = async () => {
     return await db.expense.toArray();
