@@ -172,6 +172,15 @@ export const getExpensesByAccount = async (accId: UUID) => {
         expenses.reverse().map(async (exp) => {
             const id = exp.category_id;
             if (exp.type === "transfer") {
+                if (id === accId) {
+                    const acc2 = (await getAccountByID(exp.account_id)) || dummyAccount;
+                    const catg: Category = {
+                        id: "1-1-1-1-1",
+                        name: `[ ${acc2.name} > ${acc.name} ]`,
+                        symbol: "arrow-right-left",
+                    };
+                    return { ...exp, category: catg, account: acc };
+                }
                 const acc2 = (await getAccountByID(id)) || dummyAccount;
                 const catg: Category = {
                     id: "1-1-1-1-1",
